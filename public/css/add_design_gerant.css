@@ -1,0 +1,18 @@
+#design_text_voyage {
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+#supprimer_info {
+    font-weight: bold;
+    text-decoration: underline;
+}

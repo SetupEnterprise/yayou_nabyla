@@ -1,0 +1,74 @@
+#bande {
+	width:100%;
+	margin-top: 0px;
+	margin-left: 0px;
+	box-shadow: 0px 2px 0px grey;
+}
+#logo{
+	margin-top: 0px;
+	margin-left: 0px;
+	display: inline-block;
+	width: 100px;
+}
+#recherche{
+	margin-left: 100px;
+	margin-bottom: 0;
+	display: inline-block;
+}
+#image{
+	margin-left: 0px;
+}
+.gauchelog{
+	margin-left:  20px;
+	margin-right:  50px;
+	float:left;
+}
+.droitelog{
+	margin-right:  50px;
+	float:right;
+}
+nav{
+	width: 100%;
+	margin: 35px 10px 0px 0;
+	box-shadow: 0px 2px 0px grey;
+}
+.ulnave{
+	list-style: none;
+	width: 100%;
+}
+nav ul li{
+	display: inline-block;
+	font-size:120%;
+	text-align: center;
+	border-bottom: 2px solid blue;
+	border-radius: 5px;
+	margin-left: 10px;
+	margin-bottom: 3px;
+}
+nav ul li a{
+	text-decoration: none;
+	color: blue;
+}
+nav ul li a:hover{
+	font-size:90%;
+	border-bottom: 2px solid greenyellow;
+}
+.quitter{
+	color: red;
+	text-decoration: none;
+}
+#td{
+	font-weight: bold;
+}
+#tabsaisi{
+	width: 100%;
+}
+#tabsaisi tr td input{
+	height:25px;
+	border-radius: 5px;
+	border:1px solid;
+	border-color:silver;
+}
+#tabsaisi tr{
+	margin-top: 5px;
+}

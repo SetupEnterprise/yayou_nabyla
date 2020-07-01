@@ -1,0 +1,54 @@
+div, p, span, h1, h2, h3, h4, h5, h6 {
+    font-family: 'lato';
+    /* color: #424040; */
+}
+
+.dark-blue-color {
+    color: #005ba2;
+}
+.light-blue-color {
+    color: #00a8e7;
+}
+.grey-color {
+    color: #9ea1aa;
+}
+
+.bgd-dark-blue {
+    background-color: #005ba2;
+}
+.bgd-light-blue {
+    background-color: #00a8e7;
+}
+.bgd-grey {
+    background-color: #9ea1aa;
+}
+
+.dark-blue-button {
+    background-color: #005ba2;
+    color: #fff;
+}
+.light-blue-button {
+    background-color: #00a8e7;
+    color: #fff;
+}
+.grey-button {
+    background-color: #9ea1aa;
+    color: #fff;
+}
+
+.site-content {
+    margin: 0 80px;
+    padding: 0;
+}
+
+#sidebar-section {
+    padding: 0;
+}
+#content-section {
+    padding-right: 0;
+    padding-left: 50px;
+    margin: 20px 0;
+}
+#single-produit {
+    padding: 0 20px;
+}
