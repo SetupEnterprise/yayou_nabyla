@@ -31,6 +31,7 @@ class AutomobileController extends Controller
             $auto->priorite = ((int)$auto->priorite*100)/10;
             //dd($auto);
         }
+
         return view('layouts/index', compact('automobiles'));
     }
 
@@ -56,7 +57,7 @@ class AutomobileController extends Controller
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
             $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
-            
+
             $automobile = Automobile::create([
 
                 'annee_sortie' => 2014,
@@ -89,7 +90,7 @@ class AutomobileController extends Controller
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
 
-    
+
         return redirect()->route('automobile.index');
     }
 
@@ -101,7 +102,7 @@ class AutomobileController extends Controller
      */
     public function show($id)
     {
-        
+
     }
 
     /**
@@ -112,14 +113,14 @@ class AutomobileController extends Controller
      */
     public function edit($id)
     {
-        
+
         $automobile = DB::table('automobiles')
                 ->where('automobiles.id',$id)
                 ->join('marques','automobiles.id','=','marques.automobile_id')
                 ->join('modeles','modeles.marque_id','=','marques.id')
                 ->join('couleurs', 'couleurs.automobile_id', '=', 'automobiles.id')
                 ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                
+
                 ->first();
         return view('layouts.edit', compact('automobile'));
     }
@@ -132,12 +133,12 @@ class AutomobileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
+    {
        /* dd($request);
         Automobile::where('id', $id)
           ->update(['prix' => $request->prix]);
 
-       
+
         return redirect()->route('automobile.index');*/
           /*  if($automobile){
                 $marque = Marque::create([
