@@ -17,8 +17,9 @@
                 <h4 class="card-title"> Automobile {{$automobile->nom_marque}} {{$automobile->version}}</h4>
                 </div>
                 <div class="card-body">
-                <form action="{{route('automobile.update', $automobile->id)}}" method="POST">
+                    <form action="{{route('automobile.update', $automobile->id)}}" method="POST">
                         {{ csrf_field() }}
+                        {{method_field('PUT')}}
                         <div class="row">
                             <div class="col-md-5 pr-1">
                                 <div class="form-group">
@@ -44,7 +45,7 @@
                             <div class="col-md-4 pr-1">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Prix</label>
-                                <input type="text" class="form-control" name="prix" placeholder="" value="{{$automobile->prix}}" required onchange=" name= 'prixchange'"> 
+                                <input type="text" class="form-control" name="prix" placeholder="" value="{{$automobile->prix}}" required > 
                                 </div>
                             </div>
                             <div class="col-md-4 pl-1">
@@ -57,7 +58,6 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Priorite</label>
                                 <input type="text" class="form-control" placeholder="" name="priorite" value="{{$automobile->priorite}}" required> 
-                                    {!! $errors->first('passwd_confirmation', '<p class="error">:message</p>')!!}
                                 </div>
                             </div>
                            
@@ -67,7 +67,7 @@
                             <div class="col-md-4 pl-1">
                                 <div class="form-group">
                                     <label>Date de la vente</label>
-                                <input type="date" class="form-control" name="dateVente" value="{{$automobile->date_vente}}"> 
+                                <input type="date" class="form-control" name="date_vente" value="{{$automobile->date_vente}}"> 
                                 </div>
                             </div>
                             <div class="col-md-1 pl-1"></div>
@@ -96,25 +96,32 @@
                                  </div>
                         </div>
                        
-                        <div class="clearfix"></div>
                     </form>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card card-user">
-                    
+                <div class="card-header">
+                    <h4 class="card-title"> Photo</h4>
+                    </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4"></div>
                         <div class="author">
                             <a href="#" onclick="">
                                 <img class="avatar_auto avatar-150 img-circle img-thumbnail border-bottom-warning" src="/image_auto/{{$automobile->photo_profil}}">
+
                             <h5 class="title"></h5>
                             </a>
                             
-                            <button type="submit" class="btn btn-info btn-fill pull-right">Modifier photo</button>
                         </div>
+                        <form action="{{route('automobile.update', $automobile->id)}}" method="POST" enctype="multipart/form-data">
+                            {{csrf_field() }}
+                            {{method_field('PUT') }}
+                            <input type="file" name="photo" class="btn" required>
+                            <input type="submit" class="btn btn-success btn-fill fa-pull-center" value="Modifier photo">
+                        </form>
                     </div>
                 
                 </div>

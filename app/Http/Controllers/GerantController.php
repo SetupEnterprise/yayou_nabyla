@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GerantFormRequest;
 use App\models\Gerant;
+use App\models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 
 class GerantController extends Controller
 {
@@ -15,7 +18,7 @@ class GerantController extends Controller
     public function index()
     {
         $gerant = Gerant::first();
-        //dd($gerant);
+       // dd($gerant->gerant_id);
         return view('layouts.account', compact('gerant'));
     }
 
@@ -70,8 +73,46 @@ class GerantController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-       // return 
+    {  
+        if(!$request->photo){
+        $this->validate($request, [
+            'password' => 'confirmed',
+        ]);
+        
+            if($request->new_password != null){
+                Gerant::where('gerant_id', $id)
+                    ->update([
+                        'login' => $request->login,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'password' => $request->new_password
+                    ]);
+            }else{
+                Gerant::where('gerant_id', $id)
+                    ->update([
+                        'login' => $request->login,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                    ]);
+            }
+            session()->flash('message', "La modification s'est effectuee avec succes!");
+        }else{
+            
+            ($files = $request->file('photo'));
+            // Definir le chemin du fichier
+            $destinationPath = public_path('image_auto/'); // upload path
+            $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
+            Gerant::where('gerant_id',$id)
+                    ->update([
+                        'photo' => $image_auto,
+                    ]);
+            $files->move($destinationPath, $image_auto);
+            $insert['image'] = "$image_auto";
+        }
+            return redirect()->route('gerant.index');
+            
+        
+        
     }
 
     /**

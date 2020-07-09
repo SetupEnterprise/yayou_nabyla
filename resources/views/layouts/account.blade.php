@@ -16,42 +16,44 @@
                     <h4 class="card-title"> Profil</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
-                      
+                <form action="{{route('gerant.update', $gerant->gerant_id)}}" method="POST">
+                    
                         {{ csrf_field() }}
                         {{ method_field('PUT')}} 
                         <div class="row">
                             <div class="col-md-5 pr-1">
                                 <div class="form-group">
                                     <label>Login</label>
-                                    <input type="text" class="form-control" disabled="" value="{{$gerant->login}}">
+                                    <input type="text" name="login" class="form-control" value="{{$gerant->login}}">
                                 </div>
                             </div>
                             <div class="col-md-3 px-1">
                                 <div class="form-group">
                                     <label>Prenom</label>
-                                    <input type="text" class="form-control" placeholder="" value="{{$gerant->prenom}}" required>
+                                    <input type="text" class="form-control" placeholder="" name="prenom" value="{{$gerant->prenom}}" required>
                                 </div>
                             </div>
                             <div class="col-md-4 pl-1">
                                 <div class="form-group">
                                     <label>Nom</label>
-                                    <input type="text" class="form-control" placeholder="" value="{{$gerant->nom}}" required>
+                                    <input type="text" class="form-control" placeholder="" name="nom" value="{{$gerant->nom}}" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
+                            
                             <div class="col-md-4 pr-1">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Nouveau mot de passe</label>
-                                    <input type="password" class="form-control" name="passwd" placeholder="" value="{{$gerant->password}} " disabled> 
+                                    <label>Confirmer mot de passe</label>
+                                <input type="password" class="form-control" placeholder="" name="password_confirmation" value="{{ old('passwd_confirmation') ?? ''}}"required> 
                                 </div>
                             </div>
-                            <div class="col-md-4 pr-1">
+                            <div class="col-md-2 pr-1">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Confirmer mot de passe</label>
-                                <input type="password" class="form-control" placeholder="" name="passwd_confirmation" value="{{ old('passwd_confirmation') ?? ''}}"required> 
-                                    {!! $errors->first('passwd_confirmation', '<p class="error">:message</p>')!!}
+                                    <label></label>
+                                    <input type="hidden" class="form-control" name="password" placeholder="" value="{{$gerant->password}}"> 
+                                    
+
                                 </div>
                             </div>
                             <div class="col-md-4 pl-1">
@@ -60,6 +62,7 @@
                                 <input type="password" class="form-control" name="new_password" value="{{ old('new_password') ?? ''}}"> 
                                 </div>
                             </div>
+                            {!! $errors->first('password', '<p style="color: red">:message</p>')!!}
                         </div>
                        <!-- <div class="row">
                             <div class="col-md-12">
@@ -112,12 +115,21 @@
                             <div class="col-md-4"></div>
                             <div class="author">
                                 <a href="#" onclick="">
-                                    <img class="avatar avatar-128 img-circle img-thumbnail border-bottom-warning" src="{{ asset('image_auto/goat.jpg') }}" alt="...">
+                                    <img class="avatar avatar-128 img-circle img-thumbnail border-bottom-warning" src="/image_auto/{{$gerant->photo}}">
                                 <h5 class="title">{{$gerant->prenom}} {{$gerant->nom}}</h5>
                                 </a>
-                                
-                                <button type="submit" class="btn btn-info btn-fill pull-right">Modifier photo</button>
+                               
                             </div>
+                            <form method="POST" action="{{route('gerant.update', $gerant->gerant_id)}}" enctype="multipart/form-data">
+                              {{csrf_field()}}
+                              {{method_field('PUT')}}
+                                <div class="custom-file">
+                                  <input type="file" class="custom-file-input" id="customFile" name="photo" required>
+                                  <label class="custom-file-label" for="customFile">Choisir une photo</label>
+                                </div>
+                                <input type="submit" class="btn btn-info btn-fill" value="Modifier photo">
+
+                              </form>
                         </div>
                     
                     </div>

@@ -133,33 +133,55 @@ class AutomobileController extends Controller
      */
     public function update(Request $request, $id)
     { 
-       /* dd($request);
-        Automobile::where('id', $id)
-          ->update(['prix' => $request->prix]);
-
-       
-        return redirect()->route('automobile.index');*/
-          /*  if($automobile){
-                $marque = Marque::create([
+        if(!$request->photo){
+            $marque_id = Marque::where('automobile_id', $id)->first('id');        
+            //dd($request->prix);
+            Automobile::where('id', $id)
+                        ->update([
+                        'annee_sortie' => $request->annee_sortie,
+                        'estVendu' => $request->estVendu,
+                        'date_vente' => $request->date_vente,
+                        'prix' => $request->prix,
+                        'priorite' => $request->priorite
+                        ]);
+            
+            Marque::where('automobile_id', $id)
+                    ->update([
                     'nom_marque' => $request->marque,
-                    'automobile_id' => $automobile->id
-                ]);
-                $couleur = Couleur::create([
+                    ]);
+            Couleur::where('automobile_id',$id)
+                    ->update([
                     'nom' => $request->couleur,
-                    'automobile_id' => $automobile->id
-                ]);
-                $photo = Photo::create([
-                    'photo_profil' => ,
-                    'automobile_id' => $automobile->id
-                ]);
-            }
-            if($marque){
-                $modele = Modele::create([
+                    ]);
+                    if($marque_id){
+            Modele::where('marque_id', $marque_id->id)
+                    ->update([
                     'version' => $request->version,
                     'description' => $request->description,
-                    'marque_id' => $marque->id
-                ]);
-            }*/
+                    ]);
+                    }
+        /*      
+        Photo::where('automobile_id',$id)
+                    ->update([
+                        'photo_profil' => ,
+                    ]);
+                }*/
+                return redirect()->route('automobile.index');
+        }else{
+            ($files = $request->file('photo'));
+            // Definir le chemin du fichier
+            $destinationPath = public_path('image_auto/'); // upload path
+            $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
+
+            Photo::where('automobile_id',$id)
+                    ->update([
+                        'photo_profil' => $image_auto,
+                    ]);
+            $files->move($destinationPath, $image_auto);
+            $insert['image'] = "$image_auto";
+            return redirect()->route('automobile.index');
+        }
+
     }
 
     /**

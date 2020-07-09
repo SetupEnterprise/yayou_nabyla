@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class gerantFormRequest extends FormRequest
+class GerantFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,7 @@ class gerantFormRequest extends FormRequest
             'nom' => 'required',
             'prenom' => 'required',
             'passwd' => 'required',
-            'passwd_confirmation' => 'required | different:passwd',
+            'passwd_confirmation' => 'required',
         ];
     }
 
@@ -38,7 +38,7 @@ class gerantFormRequest extends FormRequest
             'prenom.required' => 'vous devez saisir le matricule',
             'passwd.required' => 'vous devez saisir un mot de passe',
             'passwd_confirmation.required' => "Vous devez confirmer le mot de passe",
-            'passwd_confirmation.same' => "le mot de passe n'est pas conforme"
+            //'passwd_confirmation.confirmed' => "le mot de passe n'est pas conforme"
         ];
     }
 }
