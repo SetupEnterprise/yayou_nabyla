@@ -19,6 +19,7 @@ class CreateGerantTable extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->string('password');
+            $table->string('photo');
             
             $table->timestamps();
         });

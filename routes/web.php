@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/layouts/welcome');
 });
-Route::get('/gerant','StatistiqueController@index');
+Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dashboard');
+Route::resource('gerant', 'GerantController');
+
+Route::resource('automobile','AutomobileController');

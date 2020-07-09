@@ -12,7 +12,7 @@
   <title>{{$title ?? ''}}</title>
   <!-- Custom fonts for this template-->
   <link href="{{ asset('theme-asset/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-
+  @yield('head')
   <!-- Custom styles for this template-->
   <link href="{{ asset('theme-asset/css/sb-admin-2.min.css') }}" rel="stylesheet">
   <link href="{{ asset('theme-asset/js/sweetalert.css') }}" rel="stylesheet">
@@ -55,7 +55,7 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="">
+      <a class="nav-link" href="{{ route('gerant.dashboard')}}">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Tableau Bord</span></a>
       </li>
@@ -69,9 +69,9 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Operations sur les AUTOS:</h6>
-            <a class="collapse-item" href="">Lister</a>
-            <a class="collapse-item" href="">Supprimer</a>
-            <a class="collapse-item" href="">Modifier</a>
+            <a class="collapse-item" href="{{ route('automobile.index') }}">Lister</a>
+          <a class="collapse-item" href="{{ route('automobile.create') }}">Ajouter</a>
+          <a class="collapse-item" href="">Modifier</a>
           </div>
         </div>
       </li>
@@ -79,7 +79,7 @@
 
       <!-- Nav Item - Vendeur -->
       <li class="nav-item">
-      <a class="nav-link" href="">
+      <a class="nav-link" href="{{ route('gerant.index')}}">
           <i class="fas fa-fw fa-tools"></i>
           <span>Mon compte</span></a>
       </li>
@@ -102,7 +102,7 @@
       <div id="content">
 
         <!-- Topbar -->
-        @include('_nav_gerant')
+        @include('_partials/_nav_gerant')
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->

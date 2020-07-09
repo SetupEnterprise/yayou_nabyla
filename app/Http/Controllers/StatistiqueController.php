@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class StatistiqueController extends Controller
 {
     function index(){
-        return view('/home-gerant');
+        return view('/layouts/dashboard');
     }
 }

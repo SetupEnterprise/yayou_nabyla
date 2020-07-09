@@ -1,4 +1,4 @@
-@extends('master_gerant', ['title' => 'Acceuil'])
+@extends('master_gerant', ['title' => 'Tableau de bord'])
 
 @section('contenu_page')
 

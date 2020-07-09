@@ -42,7 +42,7 @@
               prénom nom
             @endif
           </span>
-          <img class="img-profile rounded-circle" src="/img/samaautosloganjb1logo2.png">
+        <img class="img-profile rounded-circle" src="{{asset('image_auto/avatar.png')}}">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

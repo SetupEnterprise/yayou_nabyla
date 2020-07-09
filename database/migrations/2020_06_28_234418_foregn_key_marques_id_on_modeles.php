@@ -16,7 +16,7 @@ class ForegnKeyMarquesIdOnModeles extends Migration
         Schema::table('modeles', function (Blueprint $table) {
             $table->unsignedBigInteger('marque_id')->after('description');
             $table->foreign('marque_id')
-                 ->references('marque_id')
+                 ->references('id')
                  ->on('marques')
                  ->onDelete('restrict')
                  ->onUpdate('cascade');

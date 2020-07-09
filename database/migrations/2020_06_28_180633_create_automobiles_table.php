@@ -14,10 +14,10 @@ class CreateAutomobilesTable extends Migration
     public function up()
     {
         Schema::create('automobiles', function (Blueprint $table) {
-            $table->bigIncrements('automobile_id');
-            $table->year('annee_sortie');
+            $table->bigIncrements('id');
+            $table->year('annee_sortie')->nullable();
             $table->boolean('estVendu');
-            $table->date('date_vente');
+            $table->date('date_vente')->nullable();
             $table->integer('prix');
             $table->string('priorite');
             $table->timestamps();
