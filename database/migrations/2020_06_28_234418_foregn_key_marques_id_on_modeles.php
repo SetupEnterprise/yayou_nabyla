@@ -18,7 +18,7 @@ class ForegnKeyMarquesIdOnModeles extends Migration
             $table->foreign('marque_id')
                  ->references('id')
                  ->on('marques')
-                 ->onDelete('restrict')
+                 ->onDelete('cascade')
                  ->onUpdate('cascade');
         });
     }

@@ -88,7 +88,7 @@ class AutomobileController extends Controller
             }
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
-
+            session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
     
         return redirect()->route('automobile.index');
     }
@@ -192,6 +192,10 @@ class AutomobileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        Automobile::destroy($id);
+
+        session()->flash('message', "La suppression s'est effectuee avec succes");
+        return redirect()->route('automobile.index');
     }
 }

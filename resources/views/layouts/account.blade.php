@@ -64,42 +64,7 @@
                             </div>
                             {!! $errors->first('password', '<p style="color: red">:message</p>')!!}
                         </div>
-                       <!-- <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 pr-1">
-                                <div class="form-group">
-                                    <label>City</label>
-                                    <input type="text" class="form-control" placeholder="City" value="Mike">
-                                </div>
-                            </div>
-                            <div class="col-md-4 px-1">
-                                <div class="form-group">
-                                    <label>Country</label>
-                                    <input type="text" class="form-control" placeholder="Country" value="Andrew">
-                                </div>
-                            </div>
-                            <div class="col-md-4 pl-1">
-                                <div class="form-group">
-                                    <label>Postal Code</label>
-                                    <input type="number" class="form-control" placeholder="ZIP Code">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>About Me</label>
-                                    <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
-                                </div>
-                            </div>
-                        </div> -->
+                      
                         <input type="submit" class="btn btn-info btn-fill pull-right" value="Mise à jour profil">
                         <div class="clearfix"></div>
                     </form>

@@ -108,6 +108,8 @@ class GerantController extends Controller
                     ]);
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
+            session()->flash('message', "La modification s'est effectuee avec succes!");
+
         }
             return redirect()->route('gerant.index');
             
@@ -123,7 +125,7 @@ class GerantController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 
     public function dashboard(){

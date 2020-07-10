@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StatistiqueController;
+use App\Http\Middleware\ConnectionSession;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('/layouts/welcome');
-});
-Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dashboard');
-Route::resource('gerant', 'GerantController');
+Route::get('/', 'StatistiqueController@login')->name('login');
 
-Route::resource('automobile','AutomobileController');
+Route::post('/', 'StatistiqueController@login_store')->name('login_store')->middleware(ConnectionSession::class);
+
+Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dashboard')->middleware(ConnectionSession::class);
+
+Route::resource('gerant', 'GerantController')->middleware(ConnectionSession::class);
+
+Route::resource('automobile','AutomobileController')->middleware(ConnectionSession::class);
+
+Route::get('/', 'StatistiqueController@disconnect')->name('gerant_disconnect');

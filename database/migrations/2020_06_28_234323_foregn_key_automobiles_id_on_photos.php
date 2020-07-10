@@ -18,7 +18,7 @@ class ForegnKeyAutomobilesIdOnPhotos extends Migration
             $table->foreign('automobile_id')
                  ->references('id')
                  ->on('automobiles')
-                 ->onDelete('restrict')
+                 ->onDelete('cascade')
                  ->onUpdate('cascade');
         });
     }

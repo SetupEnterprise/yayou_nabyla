@@ -82,7 +82,12 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                           <a class="dropdown-item" href="{{route('automobile.edit', $auto->id)}}">Modifier</a>
-                          <a class="dropdown-item" href="#">Supprimer</a>
+                          <form action="{{ route('automobile.destroy', $auto->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
+                            {{csrf_field() }}
+                            {{ method_field('DELETE')}}
+                            <input type="submit" class="dropdown-item" name="Supprimer" value="Supprimer">
+                          </form>
+                          
                         </div>
                       </div>
                     </td>
