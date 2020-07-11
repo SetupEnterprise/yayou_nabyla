@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\models\Gerant;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Exists;
 
 class StatistiqueController extends Controller
 {
@@ -30,7 +29,7 @@ class StatistiqueController extends Controller
         }
         else{
             session()->flash('erreur', 'Veuillez revoir vos parametres de connexion, elle a echoue!');
-            return redirect()->route('gerant_login');
+            return redirect()->route('login');
         }
     }
     function disconnect(Request $request){

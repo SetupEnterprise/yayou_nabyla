@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'StatistiqueController@login')->name('login');
 
-Route::post('/', 'StatistiqueController@login_store')->name('login_store')->middleware(ConnectionSession::class);
+Route::post('/', 'StatistiqueController@login_store')->name('login_store');
 
 Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dashboard')->middleware(ConnectionSession::class);
 
@@ -25,4 +25,4 @@ Route::resource('gerant', 'GerantController')->middleware(ConnectionSession::cla
 
 Route::resource('automobile','AutomobileController')->middleware(ConnectionSession::class);
 
-Route::get('/', 'StatistiqueController@disconnect')->name('gerant_disconnect');
+Route::get('/disconnect', 'StatistiqueController@disconnect')->name('gerant_disconnect');

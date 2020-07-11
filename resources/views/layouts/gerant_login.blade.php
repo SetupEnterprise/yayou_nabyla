@@ -35,7 +35,7 @@
               <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
               <div class="col-lg-6">
                 <div class="p-5">
-                    @if (session('erreur'))
+                    @if (session()->has('erreur'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{session('erreur')}}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

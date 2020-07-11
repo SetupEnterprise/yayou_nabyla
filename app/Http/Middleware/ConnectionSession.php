@@ -16,8 +16,13 @@ class ConnectionSession
     public function handle($request, Closure $next)
     {
         if(!session()->get('user')){
-            return redirect('layouts/gerant_login');
+            return redirect()->route('login');
         }
         return $next($request);
+    }
+
+    public function terminate($request, $response)
+    {
+        // Store the session data...
     }
 }
