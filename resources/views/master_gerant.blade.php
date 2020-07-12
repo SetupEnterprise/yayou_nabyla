@@ -181,20 +181,18 @@
   <script src="{{ asset('theme-asset/js/sb-admin-2.min.js') }}"></script>
   <!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
 <script src="{{ asset('js/light-bootstrap-dashboard.js?v=2.0.0')}}" type="text/javascript"></script>
+
+<script src="{{asset('theme-asset/vendor/chart.js/Chart.min.js')}}"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
-  <script src="{{ asset('/js/demo.js')}}"></script>
-  <script src="{{ asset('/js/bar-vendeur.js')}}"></script>
+<script src="{{asset('js/demo.js')}}"></script>
+<script src="{{asset('js/chart-area-demo.js')}}"></script>
+<script src="{{asset('js/chart-pie-demo.js')}}"></script>
+
   @yield('scripts') 
 
 <script src="{{ asset('/js/notification.js')}}"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-    
-            notification.showNotification();
-    
-        });
-    </script>
+   
 
 </body>
 

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Automobile;
 use App\models\Gerant;
+use App\models\Marque;
 use Illuminate\Http\Request;
 
 class StatistiqueController extends Controller
 {
     function index(){
-        return view('layouts.dashboard');
+        $nbr_auto = Automobile::count();
+        $nbr_marque = Marque::count();
+        return view('layouts.dashboard', compact('nbr_auto', 'nbr_marque'));
         
     }
     function login(){

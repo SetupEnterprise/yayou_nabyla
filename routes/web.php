@@ -28,3 +28,6 @@ Route::resource('automobile','AutomobileController')->middleware(ConnectionSessi
 Route::resource('marque', 'MarqueController');
 
 Route::get('/disconnect', 'StatistiqueController@disconnect')->name('gerant_disconnect');
+
+Route::get('/line','DashbordController@getDonneesAutoMensuels');
+Route::get('/pie','DashbordController@getStatusVente');
