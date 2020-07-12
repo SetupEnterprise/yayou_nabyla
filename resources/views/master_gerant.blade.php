@@ -71,7 +71,7 @@
             <h6 class="collapse-header">Operations sur les AUTOS:</h6>
             <a class="collapse-item" href="{{ route('automobile.index') }}">Lister</a>
           <a class="collapse-item" href="{{ route('automobile.create') }}">Ajouter</a>
-          <a class="collapse-item" href="">Modifier</a>
+          <a class="collapse-item" href="{{route('marque.index')}}">Marque</a>
           </div>
         </div>
       </li>

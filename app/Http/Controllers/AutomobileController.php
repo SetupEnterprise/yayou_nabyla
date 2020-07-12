@@ -22,16 +22,15 @@ class AutomobileController extends Controller
     public function index()
     {
         $automobiles = DB::table('automobiles')
-                        ->join('marques','automobiles.id','=','marques.automobile_id')
+                        ->join('marques','automobiles.marque_id','=','marques.id')
                         ->join('modeles','modeles.marque_id','=','marques.id')
-                        ->join('couleurs', 'couleurs.automobile_id', '=', 'automobiles.id')
+                        ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                        ->get();
+                        ->get(['automobiles.id','marques.nom_marque','version', 'prix', 'priorite','estVendu', 'annee_sortie']);
+
         foreach($automobiles as $auto){
             $auto->priorite = ((int)$auto->priorite*100)/10;
-            //dd($auto);
         }
-
         return view('layouts/index', compact('automobiles'));
     }
 
@@ -42,7 +41,12 @@ class AutomobileController extends Controller
      */
     public function create()
     {
-        return view('layouts/add');
+        
+        $marques = DB::table('marques')
+                ->join('modeles','modeles.marque_id','=','marques.id')
+                ->get();
+        $couleurs = Couleur::all();
+        return view('layouts/add', compact('marques', 'couleurs'));
     }
 
     /**
@@ -53,46 +57,45 @@ class AutomobileController extends Controller
      */
     public function store(Request $request)
     {
-            ($files = $request->file('photo'));
+            $files = $request->file('photo');
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
             $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
+            //Pour voir le couleur choisi
+            $couleur = Couleur::where('nom', $request->couleur)->first();
+            //Avoir l'ID marque
+            $str = strtok($request->marque, "-");
+            $marque = $str;
+            $version = $str = strtok("-");
 
-            $automobile = Automobile::create([
+            $marque = DB::table('marques')
+                ->where('nom_marque',$marque)
+                ->join('modeles','modeles.marque_id','=','marques.id')
+                ->where('modeles.version', $version)
+                ->first();
+            //Creation d'automobile
+            if($marque->id && $couleur){
+                $automobile = Automobile::create([
 
-                'annee_sortie' => 2014,
-                'estVendu' => false,
-                'date_vente' => null,
-                'prix' => $request->prix,
-                'priorite' => $request->priorite
-            ]);
+                    'annee_sortie' => (int)substr($request->annee_sortie,-4),
+                    'estVendu' => false,
+                    'date_vente' => null,
+                    'prix' => $request->prix,
+                    'priorite' => $request->priorite,
+                    'couleur_id' => $couleur->couleur_id,
+                    'marque_id' => $marque->id
+                ]);
+            }
             if($automobile){
-                $marque = Marque::create([
-                    'nom_marque' => $request->marque,
-                    'automobile_id' => $automobile->id
-                ]);
-                $couleur = Couleur::create([
-                    'nom' => $request->couleur,
-                    'automobile_id' => $automobile->id
-                ]);
                 $photo = Photo::create([
                     'photo_profil' => $image_auto,
                     'automobile_id' => $automobile->id
                 ]);
             }
-            if($marque){
-                $modele = Modele::create([
-                    'version' => $request->version,
-                    'description' => $request->description,
-                    'marque_id' => $marque->id
-                ]);
-            }
+          
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
             session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
-    
-
-
         return redirect()->route('automobile.index');
     }
 
@@ -115,16 +118,15 @@ class AutomobileController extends Controller
      */
     public function edit($id)
     {
-
         $automobile = DB::table('automobiles')
                 ->where('automobiles.id',$id)
-                ->join('marques','automobiles.id','=','marques.automobile_id')
+                ->join('marques','automobiles.marque_id','=','marques.id')
                 ->join('modeles','modeles.marque_id','=','marques.id')
-                ->join('couleurs', 'couleurs.automobile_id', '=', 'automobiles.id')
+                ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                 ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-
-                ->first();
-        return view('layouts.edit', compact('automobile'));
+                ->first(['automobiles.id','nom_marque','version', 'prix', 'priorite','estVendu', 'annee_sortie','nom','date_vente','description','photo_profil']);    
+        $couleurs = Couleur::all();
+        return view('layouts.edit', compact('automobile','couleurs'));
     }
 
     /**
@@ -136,33 +138,21 @@ class AutomobileController extends Controller
      */
     public function update(Request $request, $id)
     { 
+        
         if(!$request->photo){
-            $marque_id = Marque::where('automobile_id', $id)->first('id');        
             //dd($request->prix);
+            $couleur = Couleur::where('nom', $request->couleur)->first();
             Automobile::where('id', $id)
                         ->update([
                         'annee_sortie' => $request->annee_sortie,
                         'estVendu' => $request->estVendu,
                         'date_vente' => $request->date_vente,
                         'prix' => $request->prix,
-                        'priorite' => $request->priorite
+                        'priorite' => $request->priorite,
+                        'couleur_id' => $couleur->couleur_id
                         ]);
             
-            Marque::where('automobile_id', $id)
-                    ->update([
-                    'nom_marque' => $request->marque,
-                    ]);
-            Couleur::where('automobile_id',$id)
-                    ->update([
-                    'nom' => $request->couleur,
-                    ]);
-                    if($marque_id){
-            Modele::where('marque_id', $marque_id->id)
-                    ->update([
-                    'version' => $request->version,
-                    'description' => $request->description,
-                    ]);
-                    }
+            
         /*      
         Photo::where('automobile_id',$id)
                     ->update([

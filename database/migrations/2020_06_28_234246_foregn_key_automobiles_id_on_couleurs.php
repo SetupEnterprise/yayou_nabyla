@@ -13,11 +13,11 @@ class ForegnKeyAutomobilesIdOnCouleurs extends Migration
      */
     public function up()
     {
-        Schema::table('couleurs', function (Blueprint $table) {
-            $table->unsignedBigInteger('automobile_id')->after('nom');
-            $table->foreign('automobile_id')
-                 ->references('id')
-                 ->on('automobiles')
+        Schema::table('automobiles', function (Blueprint $table) {
+            $table->unsignedBigInteger('couleur_id')->after('marque_id');
+            $table->foreign('couleur_id')
+                 ->references('couleur_id')
+                 ->on('couleurs')
                  ->onDelete('cascade')
                  ->onUpdate('cascade');
         });

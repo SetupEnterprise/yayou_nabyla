@@ -24,13 +24,13 @@
                             <div class="col-md-5 pr-1">
                                 <div class="form-group">
                                     <label>Marque</label>
-                                <input type="text" class="form-control" name="marque" value="{{$automobile->nom_marque}}" required>
+                                <input type="text" class="form-control" disabled name="marque" value="{{$automobile->nom_marque}}" required>
                                 </div>
                             </div>
                             <div class="col-md-3 px-1">
                                 <div class="form-group">
                                     <label>Version</label>
-                                    <input type="text" class="form-control" name="version" placeholder="" value="{{$automobile->version}}" required>
+                                    <input type="text" class="form-control" disabled name="version" placeholder="" value="{{$automobile->version}}" required>
                                 </div>
                             </div>
                             <div class="col-md-4 pl-1">
@@ -51,7 +51,16 @@
                             <div class="col-md-4 pl-1">
                                 <div class="form-group">
                                     <label>Couleur</label>
-                                    <input type="text" class="form-control" name="couleur" value="{{$automobile->nom}}" required> 
+                                    <select name="couleur" class="form-control" >
+                                        @foreach ($couleurs as $item)
+                                       @if ($automobile->nom==$item->nom)
+                                        <option value="{{$item->nom}}" selected>{{$item->nom}}</option>
+                                       @else
+                                       <option value="{{$item->nom}}">{{$item->nom}}</option>
+                                       @endif
+                                            
+                                         @endforeach
+                                    </select>    
                                 </div>
                             </div>
                             <div class="col-md-4 pr-1">
@@ -84,7 +93,7 @@
                             <div class="col-md-6 pl-1">
                                 <div class="form-group">
                                     <label>Description</label>
-                                <textarea class="form-control" name="description" >{{$automobile->description}}</textarea>                         
+                                <textarea class="form-control" disabled name="description" >{{$automobile->description}}</textarea>                         
                                 </div>
                             </div>
                             <div class="col-md-3 pl-1"></div>

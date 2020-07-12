@@ -13,11 +13,11 @@ class ForegnKeyAutomobilesIdOnMarques extends Migration
      */
     public function up()
     {
-        Schema::table('marques', function (Blueprint $table) {
-            $table->unsignedBigInteger('automobile_id')->after('logo');
-            $table->foreign('automobile_id')
+        Schema::table('automobiles', function (Blueprint $table) {
+            $table->unsignedBigInteger('marque_id')->after('priorite');
+            $table->foreign('marque_id')
                  ->references('id')
-                 ->on('automobiles')
+                 ->on('marques')
                  ->onDelete('cascade')
                  ->onUpdate('cascade');
         });

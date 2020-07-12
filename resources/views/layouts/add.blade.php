@@ -23,16 +23,12 @@
                             <div class="col-md-8 pr-1">
                                 <div class="form-group">
                                     <label>Marque</label>
-                                    <input type="text" class="form-control" name="marque"  placeholder="marque" value=""  required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8 pr-1">
-                                <div class="form-group">
-                                    <label>Version Modele</label>
-                                    <input type="text" class="form-control" name="version"  placeholder="Version Modele" value="" required>
+                                   
+                                    <select name="marque" class="form-control" >
+                                        @foreach ($marques as $item)
+                                    <option value="{{$item->nom_marque}}-{{$item->version}}-">{{$item->nom_marque}} - {{$item->version}}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -41,8 +37,12 @@
                             <div class="col-md-8 pr-1">
                                 <div class="form-group">
                                     <label>Couleur</label>
-                                    <input type="text" class="form-control" name="couleur"  placeholder="Couleur" value="" required>
-                                </div>
+                                    <select name="couleur" class="form-control" >
+                                        @foreach ($couleurs as $item)
+                                    <option value="{{$item->nom}}">{{$item->nom}}</option>
+                                    @endforeach
+                                    </select>                               
+                                 </div>
                             </div>
                         </div>
                         <div class="row">
@@ -59,7 +59,7 @@
                             <div class="col-md-8 pr-1">
                                 <div class="form-group">
                                     <label>Priorite</label>
-                                    <input type="text" class="form-control" name="priorite" placeholder="priorite" value="" required>
+                                    <input type="text" class="form-control" name="priorite" placeholder="noter /10 ex: 8/10" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -81,15 +81,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8 pr-1">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" name="description"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                      
                         <div class="row">
                             <div class="col-md-2"></div>
                                 <button type="submit" class="col-md-8 pr-1 btn btn-info btn-fill pull-right">Enregistrer</button>

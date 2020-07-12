@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Marque extends Model
 {
-    protected $fillable = ['id', 'nom_marque','automobile_id']; 
+    protected $fillable = ['id', 'nom_marque','logo']; 
 }

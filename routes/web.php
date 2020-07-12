@@ -25,4 +25,6 @@ Route::resource('gerant', 'GerantController')->middleware(ConnectionSession::cla
 
 Route::resource('automobile','AutomobileController')->middleware(ConnectionSession::class);
 
+Route::resource('marque', 'MarqueController');
+
 Route::get('/disconnect', 'StatistiqueController@disconnect')->name('gerant_disconnect');
