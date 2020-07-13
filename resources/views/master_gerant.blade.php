@@ -198,7 +198,6 @@
 
 <script src="{{asset('theme-asset/vendor/chart.js/Chart.min.js')}}"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
-<<<<<<< HEAD
   <script src="{{ asset('/js/demo.js')}}"></script>
   <script src="{{ asset('/js/bar-vendeur.js')}}"></script>
   @yield('scripts')
@@ -212,17 +211,15 @@
 
         });
     </script>
-=======
 <script src="{{asset('js/demo.js')}}"></script>
 <script src="{{asset('js/chart-area-demo.js')}}"></script>
 <script src="{{asset('js/chart-pie-demo.js')}}"></script>
 
-  @yield('scripts') 
+  @yield('scripts')
 
 <script src="{{ asset('/js/notification.js')}}"></script>
 
-   
->>>>>>> 70b9281f8e0912c728c85963b8f9a3c720cb70d0
+
 
 </body>
 
