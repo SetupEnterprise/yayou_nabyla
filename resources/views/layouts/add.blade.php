@@ -24,10 +24,12 @@
                                 <div class="form-group">
                                     <label>Marque</label>
 
-                                    <select name="nom_marque" class="form-control" onchange="showCustomer(this.value)">
+                                    <select
+                                        name="nom_marque" id="nom_marque"
+                                        class="form-control dynamic" data-dependent="modele">
                                         <option>Veuillez sélectionner une marque</option>
                                         @foreach ($marques as $item)
-                                            <option value="{{$item->marque_id}}-">{{$item->nom_marque}}</option>
+                                            <option value="{{$item->nom_marque}}-">{{$item->nom_marque}}</option>
                                         @endforeach
                                         @if ($errors->has('nom_marque'))
                                             <span class="custom-control-description text-danger">
@@ -44,40 +46,20 @@
                             <div class='col-md-8 pr-1'>
                                 <div class='form-group'>
                                     <label>Modèl</label>
-                                    <select name='modele' class='form-control'>
-                                        @foreach ($marques as $item)
+                                    <select id="modele" name='modele' class='form-control'>
+                                        <option value="">Veuillez sélectionner un modèl</option>
+                                        {{-- @foreach ($marques as $item)
                                             <option value="{{$item->modele_id}}">{{$item->version}}</option>
                                         @endforeach
                                         @if ($errors->has('modele'))
                                             <span class="custom-control-description text-danger">
                                                 {{ $errors->first('modele')}}
                                             </span>
-                                        @endif
+                                        @endif --}}
                                     </select>
                                 </div>
                             </div>
                         </div>
-
-                        <script>
-                            function showCustomer(str) {
-                                var xhttp;
-                                if (str == "") {
-                                    document.getElementById("txtHint").innerHTML = "";
-                                    return;
-                                }
-                                xhttp = new XMLHttpRequest();
-                                xhttp.onreadystatechange = function() {
-                                    if (this.readyState == 4 && this.status == 200) {
-                                        document.getElementById("txtHint").innerHTML = this.responseText;
-                                    }
-                                };
-                                    xhttp.open("GET", "automobile.getModelesMarques?q="+str, true);
-                                    xhttp.send();
-                                }
-                        </script>
-
-
-
 
                         <div class="row">
                             <div class="col-md-2"></div>
@@ -181,8 +163,28 @@
     </div>
 </div>
 <script>
-    function loadModeleMarque() {
-        document.getElementById("demo").innerHTML = "Paragraph changed!";
+$(document).ready(function(){
+
+ $('.dynamic').change(function(){
+    console.log('dynamic ok');
+  if($(this).val() != '')
+  {
+   var select = $(this).attr("id");
+   var value = $(this).val();
+   var dependent = $(this).data('dependent');
+   var _token = $('input[name="_token"]').val();
+   $.ajax({
+    url:"{{ route('automobile.fetch') }}",
+    method:"POST",
+    data:{select:select, value:value, _token:_token, dependent:dependent},
+    success:function(result)
+    {
+     $('#'+dependent).html(result);
     }
+
+   })
+  }
+ });
+});
 </script>
 @endsection

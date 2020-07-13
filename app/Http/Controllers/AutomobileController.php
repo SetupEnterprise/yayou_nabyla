@@ -50,10 +50,21 @@ class AutomobileController extends Controller
         return view('layouts/add', compact('marques', 'couleurs'));
     }
 
-    public function getModelesMarques($id)
+    public function fetch(Request $request)
     {
-        $modelesMarque = Modele::where('marque_id',$id)->firstOrFail();
-        return $modelesMarque;
+        $select = $request->get('select');
+        $value = $request->get('value');
+        $dependent = $request->get('dependent');
+        dd('select '.$select.' value '.$value.' dependent '.$dependent);
+        $data = DB::table('modeles')
+            ->where($select, $value)
+            ->groupBy($dependent)
+            ->get();
+        $output = '<option value="">Select '.ucfirst($dependent).'</option>';
+        foreach ($data as $row) {
+            $output .= '<option value="'.$row->dependent.'">'.$row->dependent.'</option>';
+        }
+        echo $output;
     }
 
     /**

@@ -24,6 +24,7 @@ Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dash
 Route::resource('gerant', 'GerantController')->middleware(ConnectionSession::class);
 
 Route::resource('automobile','AutomobileController')->middleware(ConnectionSession::class);
+Route::post('automobile/fetch', 'AutomobileController@fetch')->name('automobile.fetch');
 
 Route::resource('marque', 'MarqueController')->middleware(ConnectionSession::class);
 
