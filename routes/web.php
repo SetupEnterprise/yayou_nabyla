@@ -30,3 +30,6 @@ Route::resource('marque', 'MarqueController')->middleware(ConnectionSession::cla
 Route::resource('modele', 'ModeleController')->middleware(ConnectionSession::class);
 
 Route::get('/disconnect', 'StatistiqueController@disconnect')->name('gerant_disconnect');
+
+Route::get('/line','DashbordController@getDonneesAutoMensuels');
+Route::get('/pie','DashbordController@getStatusVente');

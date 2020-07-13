@@ -1,17 +1,27 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
-
+this.getStatusVente();
+function getStatusVente(){
+  var urlPath = 'http://'+window.location.hostname+':'+ window.location.port +'/pie';
+  var labels = new Array();
+  var donnees = new Array();
+  var max;
+  $(document).ready(function(){
+    $.get(urlPath, function(response){
+   
+        donnees = response.vente;
+    
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Direct", "Referral", "Social"],
+    labels: ["Vendu", "Non Vendu"],
     datasets: [{
-      data: [55, 30, 15],
-      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+      data: donnees,
+      backgroundColor: [ '#1cc88a','#4e73df'],
+      hoverBackgroundColor: ['#17a673','#2e59d9', ],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
@@ -33,3 +43,6 @@ var myPieChart = new Chart(ctx, {
     cutoutPercentage: 80,
   },
 });
+    });
+  });
+}

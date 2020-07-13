@@ -195,7 +195,10 @@
   <script src="{{ asset('theme-asset/js/sb-admin-2.min.js') }}"></script>
   <!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
 <script src="{{ asset('js/light-bootstrap-dashboard.js?v=2.0.0')}}" type="text/javascript"></script>
+
+<script src="{{asset('theme-asset/vendor/chart.js/Chart.min.js')}}"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
+<<<<<<< HEAD
   <script src="{{ asset('/js/demo.js')}}"></script>
   <script src="{{ asset('/js/bar-vendeur.js')}}"></script>
   @yield('scripts')
@@ -209,6 +212,17 @@
 
         });
     </script>
+=======
+<script src="{{asset('js/demo.js')}}"></script>
+<script src="{{asset('js/chart-area-demo.js')}}"></script>
+<script src="{{asset('js/chart-pie-demo.js')}}"></script>
+
+  @yield('scripts') 
+
+<script src="{{ asset('/js/notification.js')}}"></script>
+
+   
+>>>>>>> 70b9281f8e0912c728c85963b8f9a3c720cb70d0
 
 </body>
 
