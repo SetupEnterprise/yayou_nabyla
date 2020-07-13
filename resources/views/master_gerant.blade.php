@@ -30,9 +30,9 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon rotate-n-15">
-          
+
         </div>
-        <div class="sidebar-brand-text mx-3">Yayou_Nabila</div>
+        <div class="sidebar-brand-text mx-3">Yayou Nabyla</div>
       </a>
 
       <!-- Divider -->
@@ -76,6 +76,20 @@
         </div>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2" aria-expanded="true" aria-controls="collapseUtilities2">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Modèles</span>
+        </a>
+        <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Operations sur les Modèles:</h6>
+          <a class="collapse-item" href="{{ route('modele.create') }}">Ajouter</a>
+            <a class="collapse-item" href="{{ route('modele.index') }}">Lister</a>
+          </div>
+        </div>
+      </li>
+
 
       <!-- Nav Item - Vendeur -->
       <li class="nav-item">
@@ -107,7 +121,7 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-         
+
           @if (session('message'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
               {{session('message')}}
@@ -184,15 +198,15 @@
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
   <script src="{{ asset('/js/demo.js')}}"></script>
   <script src="{{ asset('/js/bar-vendeur.js')}}"></script>
-  @yield('scripts') 
+  @yield('scripts')
 
 <script src="{{ asset('/js/notification.js')}}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-    
+
             notification.showNotification();
-    
+
         });
     </script>
 

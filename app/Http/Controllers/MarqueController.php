@@ -6,6 +6,7 @@ use App\models\Marque;
 use App\models\Modele;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MarqueController extends Controller
 {
@@ -17,9 +18,8 @@ class MarqueController extends Controller
     public function index()
     {
         $marques = DB::table('marques')
-        ->join('modeles','modeles.marque_id','=','marques.id')
-        ->get();   
-       // dd($marques);     
+        ->get();
+       // dd($marques);
         return view('marque.index', compact('marques'));
     }
 
@@ -41,29 +41,33 @@ class MarqueController extends Controller
      */
     public function store(Request $request)
     {
+        //Gestion d'erreur
+        $request->validate([
+            'nom_marque' => 'required|min:2|unique:marques',
+            'logo' => 'image',
+        ]);
+
        if( $files = $request->file('logo')){
                        // Definir le chemin du fichier
-            $destinationPath = public_path('image_auto/'); // upload path
+            $destinationPath = public_path('logo_marque/'); // upload path
             $logo = date('dmYHis') . "." . $files->getClientOriginalExtension();
 
             $files->move($destinationPath, $logo);
             $insert['image'] = $logo;
-       }
-            
-                $marque = Marque::create([
-                    'nom_marque' => $request->marque,
-                    'logo' => $logo ?? null
-                ]);
-            if($marque){
-                $modele = Modele::create([
-                    'version' => $request->version,
-                    'description' => $request->description,
-                    'marque_id' => $marque->id
-                ]);
-            }
-          
+
+            //Insertion dans la base de donnees
+            $marque = Marque::create([
+                'nom_marque' => strtoupper($request->nom_marque),
+                'logo' => $logo ?? null
+            ]);
+
             session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
             return redirect()->route('marque.index');
+       }else{
+           session()->flash('message', "Une erreur s'est produite lors de enregistrement de la marque");
+            return redirect()->route('marque.index');
+       }
+
     }
 
     /**
@@ -102,12 +106,12 @@ class MarqueController extends Controller
     public function update(Request $request, $id)
     {
         if(!$request->logo){
-            
+
             $marque = Marque::where('id', $id)
                     ->update([
                     'nom_marque' => $request->marque,
                     ]);
-            
+
             if($marque){
             Modele::where('marque_id', $id)
                     ->update([
@@ -115,7 +119,7 @@ class MarqueController extends Controller
                     'description' => $request->description,
                     ]);
                     }
-      
+
                 return redirect()->route('marque.index');
         }else{
             ($files = $request->file('logo'));

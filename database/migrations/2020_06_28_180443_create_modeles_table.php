@@ -16,8 +16,8 @@ class CreateModelesTable extends Migration
         Schema::create('modeles', function (Blueprint $table) {
             $table->bigIncrements('modele_id');
             $table->string('version');
-            $table->string('description');
-            
+            $table->text('description')->nullable();
+
             $table->timestamps();
         });
     }

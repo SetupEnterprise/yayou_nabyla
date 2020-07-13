@@ -11,7 +11,7 @@
       <div class="col-md-10">
           <div class="card shadow">
             <div class="card-header border-0">
-            <a class="btn btn-primary" href="{{route('marque.create')}}">Nouvelle Marque</a>
+                <a class="btn btn-primary" href="{{route('modele.create')}}">Nouveau modèl</a>
             </div>
 
             <div class="table-responsive">
@@ -21,33 +21,39 @@
                   <tr>
                     <th scope="col">Logo</th>
                     <th scope="col">Marque</th>
+                    <th scope="col">Modèl</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($marques as $marque)
+                  @foreach ($modeles as $modele)
 
 
                   <tr>
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                            <img alt="Image placeholder" src="logo_marque/{{$marque->logo}}"/>
+                            <img alt="Image placeholder" src="logo_marque/{{$modele->logo}}"/>
                         </a>
                       </div>
                     </th>
 
                     <td>
-                        <span class="mb-0 text-sm font-weight-bold">{{$marque->nom_marque}}</span>
+                        <span class="mb-0 text-sm font-weight-bold">{{$modele->nom_marque}}</span>
+                    </td>
+
+                    <td>
+                        <span class="mb-0 text-sm font-weight-bold">{{$modele->version}}</span>
                     </td>
                     <td class="text-right">
                         <div class="dropdown">
-                          <a class="btn btn-sm btn-icon-only text-light" style="background-color: #eaecf4" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <a class="btn btn-sm btn-icon-only text-light bg-primary"  href="#" data-toggle="modal" data-target="#staticBackdrop">
                             <i class="fas fa-ellipsis-v"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="{{route('marque.edit', $marque->id)}}">Modifier</a>
-                            <form action="{{ route('marque.destroy', $marque->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" href="#">Voir la description</a>
+                            <a class="dropdown-item" href="{{route('modele.edit', $modele->modele_id)}}">Modifier</a>
+                            <form action="{{ route('modele.destroy', $modele->modele_id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
                               {{csrf_field() }}
                               {{ method_field('DELETE')}}
                               <input type="submit" class="dropdown-item" name="Supprimer" value="Supprimer">
@@ -55,7 +61,31 @@
 
                           </div>
                         </div>
-                      </td>
+                    </td>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">{{$modele->nom_marque}} - {{$modele->version}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{$modele->description}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" >Fermer</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                   </tr>
                   @endforeach
                 </tbody>

@@ -41,10 +41,11 @@ class AutomobileController extends Controller
      */
     public function create()
     {
-        
+
         $marques = DB::table('marques')
                 ->join('modeles','modeles.marque_id','=','marques.id')
                 ->get();
+        dd($marques);
         $couleurs = Couleur::all();
         return view('layouts/add', compact('marques', 'couleurs'));
     }
@@ -92,7 +93,7 @@ class AutomobileController extends Controller
                     'automobile_id' => $automobile->id
                 ]);
             }
-          
+
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
             session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
@@ -124,7 +125,7 @@ class AutomobileController extends Controller
                 ->join('modeles','modeles.marque_id','=','marques.id')
                 ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                 ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                ->first(['automobiles.id','nom_marque','version', 'prix', 'priorite','estVendu', 'annee_sortie','nom','date_vente','description','photo_profil']);    
+                ->first(['automobiles.id','nom_marque','version', 'prix', 'priorite','estVendu', 'annee_sortie','nom','date_vente','description','photo_profil']);
         $couleurs = Couleur::all();
         return view('layouts.edit', compact('automobile','couleurs'));
     }
@@ -137,8 +138,8 @@ class AutomobileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
-        
+    {
+
         if(!$request->photo){
             //dd($request->prix);
             $couleur = Couleur::where('nom', $request->couleur)->first();
@@ -151,9 +152,9 @@ class AutomobileController extends Controller
                         'priorite' => $request->priorite,
                         'couleur_id' => $couleur->couleur_id
                         ]);
-            
-            
-        /*      
+
+
+        /*
         Photo::where('automobile_id',$id)
                     ->update([
                         'photo_profil' => ,
@@ -185,7 +186,7 @@ class AutomobileController extends Controller
      */
     public function destroy($id)
     {
-        
+
         Automobile::destroy($id);
 
         session()->flash('message', "La suppression s'est effectuee avec succes");
