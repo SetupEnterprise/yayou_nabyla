@@ -16,6 +16,8 @@
   <!-- Custom styles for this template-->
   <link href="{{ asset('theme-asset/css/sb-admin-2.min.css') }}" rel="stylesheet">
   <link href="{{ asset('theme-asset/js/sweetalert.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/yearpicker.css') }}">
+
 
 </head>
 
@@ -182,6 +184,13 @@
     </div>
 
   <!-- Bootstrap core JavaScript-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="{{ asset('js/yearpicker.js') }}"></script>
+<script type="text/javascript">
+    $('.yearpicker').yearpicker();
+</script>
   <script src="{{ asset('theme-asset/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('theme-asset/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('js/popper.min.js')}}" type="text/javascript"></script>

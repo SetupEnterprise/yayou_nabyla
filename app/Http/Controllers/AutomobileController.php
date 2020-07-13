@@ -45,9 +45,15 @@ class AutomobileController extends Controller
         $marques = DB::table('marques')
                 ->join('modeles','modeles.marque_id','=','marques.id')
                 ->get();
-        dd($marques);
+        //dd($marques);
         $couleurs = Couleur::all();
         return view('layouts/add', compact('marques', 'couleurs'));
+    }
+
+    public function getModelesMarques($id)
+    {
+        $modelesMarque = Modele::where('marque_id',$id)->firstOrFail();
+        return $modelesMarque;
     }
 
     /**
@@ -58,6 +64,21 @@ class AutomobileController extends Controller
      */
     public function store(Request $request)
     {
+        //dd(date('Y'));
+        //dd($request->sortie.' '.date('Y'));
+        if ($request->sortie > date('Y')) {
+            return back()->with('sortie', "L'année de sortie ne peut être supérieure à ".date('Y'));
+        }
+        $this->validate($request,[
+            'nom_marque' => 'required',
+            'modele' => 'required',
+            'couleur' => 'required',
+            'sortie' => 'required',
+            'priorite' => 'required',
+            'prix' => 'required|integer',
+            'photo' => 'required|image',
+        ]);
+
             $files = $request->file('photo');
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
@@ -97,7 +118,7 @@ class AutomobileController extends Controller
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
             session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
-        return redirect()->route('automobile.index');
+            return redirect()->route('automobile.index');
     }
 
     /**
