@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\StatistiqueController;
 use App\Http\Middleware\ConnectionSession;
+use App\models\Modele;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Console\Input\Input;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +27,12 @@ Route::get('/gerant/dashboard','StatistiqueController@index')->name('gerant.dash
 Route::resource('gerant', 'GerantController')->middleware(ConnectionSession::class);
 
 Route::resource('automobile','AutomobileController')->middleware(ConnectionSession::class);
-Route::post('automobile/fetch', 'AutomobileController@fetch')->name('automobile.fetch');
+
+Route::post('automobile/store','AutomobileController@store')->middleware(ConnectionSession::class);
+
+Route::get('/getMarques', 'AutomobileController@getMarques')->middleware(ConnectionSession::class);
+
+Route::get('/getModelesMarque/{id}', 'AutomobileController@getModelesMarque')->middleware(ConnectionSession::class);
 
 Route::resource('marque', 'MarqueController')->middleware(ConnectionSession::class);
 

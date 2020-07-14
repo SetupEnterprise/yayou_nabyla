@@ -11,6 +11,7 @@ use App\models\Automobile;
 use App\models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AutomobileController extends Controller
 {
@@ -41,31 +42,30 @@ class AutomobileController extends Controller
      */
     public function create()
     {
-
-        $marques = DB::table('marques')
-                ->join('modeles','modeles.marque_id','=','marques.id')
-                ->get();
-        //dd($marques);
-        $couleurs = Couleur::all();
-        return view('layouts/add', compact('marques', 'couleurs'));
+        return view('layouts.add');
     }
 
-    public function fetch(Request $request)
+    public function getMarques()
     {
-        $select = $request->get('select');
-        $value = $request->get('value');
-        $dependent = $request->get('dependent');
-        dd('select '.$select.' value '.$value.' dependent '.$dependent);
-        $data = DB::table('modeles')
-            ->where($select, $value)
-            ->groupBy($dependent)
+        $marques = DB::table('marques')
+            ->join('modeles','modeles.marque_id','=','marques.id')
             ->get();
-        $output = '<option value="">Select '.ucfirst($dependent).'</option>';
-        foreach ($data as $row) {
-            $output .= '<option value="'.$row->dependent.'">'.$row->dependent.'</option>';
-        }
-        echo $output;
+
+        return response()->json([
+            'status' => 'success',
+            'marques' => $marques,
+        ], 200);
     }
+
+    public function getModelesMarque ($id){
+        $modelesMarque = Modele::where('marque_id', '=', $id)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'modelesMarque' => $modelesMarque,
+        ], 200);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -75,12 +75,14 @@ class AutomobileController extends Controller
      */
     public function store(Request $request)
     {
-        //dd(date('Y'));
-        //dd($request->sortie.' '.date('Y'));
         if ($request->sortie > date('Y')) {
-            return back()->with('sortie', "L'année de sortie ne peut être supérieure à ".date('Y'));
+            return response()->json([
+                'status' => 'error',
+                'error_date' => "L'année de sortie ne peut être supérieure à ".date('Y')
+            ], 200);
         }
-        $this->validate($request,[
+
+        $validator = Validator::make($request->all(), [
             'nom_marque' => 'required',
             'modele' => 'required',
             'couleur' => 'required',
@@ -90,7 +92,27 @@ class AutomobileController extends Controller
             'photo' => 'required|image',
         ]);
 
-            $files = $request->file('photo');
+
+        if($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 200);
+        }
+
+        $images = $request->file('photo');
+
+        foreach ($images as $img ) {
+            // Definir le chemin du fichier
+            $destinationPath = public_path('image_auto/'); // upload path
+            $image = date('dmYHis') . "." . $img->getClientOriginalExtension();
+
+            $img->move($destinationPath, $image);
+            $insert['image'] = $image;
+        }
+
+
+            /* $files = $request->file('photo');
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
             $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
@@ -129,7 +151,7 @@ class AutomobileController extends Controller
             $files->move($destinationPath, $image_auto);
             $insert['image'] = "$image_auto";
             session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
-            return redirect()->route('automobile.index');
+            return redirect()->route('automobile.index'); */
     }
 
     /**
