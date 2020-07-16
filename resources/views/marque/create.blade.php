@@ -46,7 +46,7 @@
                             <div class="col-md-8 pr-1">
                                 <div class="form-group">
                                     <label>logo</label>
-                                    <input type="file" class="form-control-file"  name="logo" aria-describedby="fileHelpId">
+                                    <input type="file" class="form-control-file" multiple  name="logo[]" aria-describedby="fileHelpId">
                                     @if ($errors->has('logo'))
                                         <span class="custom-control-description text-danger">
                                             {{ $errors->first('logo')}}

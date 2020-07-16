@@ -79865,7 +79865,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       sortie: '',
       priorite: '',
       prix: 0,
-      photo: [],
+      photo: null,
       error: '',
       success: '',
       isLoading: false
@@ -79964,8 +79964,9 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
 
         case 'photo':
           this.setState({
-            photo: value.files
+            photo: e.target.files
           });
+          console.log('photo', photo);
           break;
 
         default:
@@ -79988,21 +79989,22 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       this.setState({
         isLoading: true
       });
-      /* if (nom_marque === "") {
+
+      if (nom_marque === "") {
         error = "Veuillez sélectionner une marque";
-      }else if (modele === "") {
+      } else if (modele === "") {
         error = "Veuillez sélectionner un modèl";
-      }else if (couleur === "") {
+      } else if (couleur === "") {
         error = "Veuillez sélectionner une couleur";
-      }else if (sortie === "") {
+      } else if (sortie === "") {
         error = "Veuillez sélectionner une année de sortie";
-      }else if (priorite === "") {
+      } else if (priorite === "") {
         error = "Veuillez sélectionner la priorité de la voiture";
-      }else if (prix === "" || prix === 0) {
+      } else if (prix === "" || prix <= 0) {
         error = "Veuillez saisir le montant";
-      }else if (photo === "") {
-        error = "Veuillez choisir au moins une image";
-      } */
+      } else if (photo === "") {
+        error = "Veuillez choisir une image";
+      }
 
       if (error === '') {
         this.sendData();
@@ -80026,18 +80028,15 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       formData.append('priorite', this.state.priorite);
       formData.append('prix', this.state.prix);
       formData.append('photo', this.state.photo);
-      console.log('photo', this.state.photo);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/automobile/store", formData).then(function (response) {
         var data = response.data;
-        var _this4$state = _this4.state,
-            success = _this4$state.success,
-            error = _this4$state.error;
+        var error = _this4.state.error;
 
         if (data.status === 'success') {
-          success = data.message;
+          console.log('data.status', data.status);
 
           _this4.setState({
-            success: success
+            success: data.message
           });
 
           setTimeout(function () {
@@ -80048,9 +80047,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         } else {
           console.log('errors', data.errors);
 
-          if (data.error_date !== '') {
-            error = data.error_date;
-          } else if (data.errors['nom_marque'] !== undefined) {
+          if (data.errors['nom_marque'] !== undefined) {
             error = data.errors['nom_marque'][0];
           } else if (data.errors['modele'] !== undefined) {
             error = data.errors['modele'][0];
@@ -80064,6 +80061,10 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
             error = data.errors['prix'][0];
           } else if (data.errors['photo'] !== undefined) {
             error = data.errors['photo'][0];
+          } else if (data.errors['date_sortie' !== undefined]) {
+            error = data.errors['date_sortie'][0];
+          } else if (data.errors['prix_null' !== undefined]) {
+            error = data.errors['prix_null'][0];
           } else if (data.errors !== "") {
             error = data.errors;
           } //error = data.errors;
@@ -80086,7 +80087,8 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
           marques = _this$state2.marques,
           modelesMarque = _this$state2.modelesMarque,
           error = _this$state2.error,
-          isLoading = _this$state2.isLoading;
+          isLoading = _this$state2.isLoading,
+          success = _this$state2.success;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -80106,7 +80108,9 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         enctype: "multipart/form-data"
       }, error !== "" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-12 text-danger mb-2 mt-2 text-center"
-      }, error) : "", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, error) : "", success !== "" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-12 text-danger mb-2 mt-2 text-center"
+      }, success) : "", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "column"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
@@ -80120,7 +80124,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         name: "nom_marque",
         value: this.state.nom_marque,
         onChange: this.onHandleChange,
-        className: "form-control dynamic"
+        className: "form-control"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Veuillez s\xE9lectionner une marque"), marques.map(function (marque, i) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
           key: i,
@@ -80173,12 +80177,13 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         className: "col-md-8 pr-1"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Annee de sortie"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_year_picker__WEBPACK_IMPORTED_MODULE_5___default.a, {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Annee de sortie"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.onHandleChange,
+        type: "text",
         className: "form-control yearpicker",
         name: "sortie",
         value: this.state.sortie
-      }), "                                                "))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-2"
@@ -80194,10 +80199,10 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         name: "priorite",
         value: this.state.priorite
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "S\xE9lectionnez la priorit\xE9 d'affichage"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "0"
-      }, "Dans Achat"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "1"
-      }, "Dans accueil"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Dans accueil"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "0"
+      }, "Dans Achat"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-2"
@@ -80222,9 +80227,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Photo"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         onChange: this.onHandleChange,
-        value: this.state.photo,
         type: "file",
-        multiple: true,
         className: "form-control-file",
         name: "photo",
         "aria-describedby": "fileHelpId"

@@ -18,7 +18,7 @@ class CreateAutomobile extends Component {
             sortie: '',
             priorite: '',
             prix: 0,
-            photo: [],
+            photo: null,
             error: '',
             success: '',
             isLoading: false
@@ -88,7 +88,8 @@ class CreateAutomobile extends Component {
               break;
 
             case 'photo':
-              this.setState({ photo: value.files});
+              this.setState({ photo: e.target.files });
+              console.log('photo', photo);
               break;
 
             default:
@@ -102,7 +103,7 @@ class CreateAutomobile extends Component {
       let { error } = this.state;
       this.setState({isLoading: true});
 
-      /* if (nom_marque === "") {
+      if (nom_marque === "") {
         error = "Veuillez sélectionner une marque";
       }else if (modele === "") {
         error = "Veuillez sélectionner un modèl";
@@ -112,11 +113,11 @@ class CreateAutomobile extends Component {
         error = "Veuillez sélectionner une année de sortie";
       }else if (priorite === "") {
         error = "Veuillez sélectionner la priorité de la voiture";
-      }else if (prix === "" || prix === 0) {
+      }else if (prix === "" || prix <= 0) {
         error = "Veuillez saisir le montant";
       }else if (photo === "") {
-        error = "Veuillez choisir au moins une image";
-      } */
+        error = "Veuillez choisir une image";
+      }
 
       if (error === '') {
         this.sendData();
@@ -133,27 +134,23 @@ class CreateAutomobile extends Component {
       formData.append('sortie', this.state.sortie);
       formData.append('priorite', this.state.priorite);
       formData.append('prix', this.state.prix);
-      formData.append('photo', this.state.photo);
-
-      console.log('photo', this.state.photo);
+      formData.append('photo', this.state.photo );
 
       axios.post(`/automobile/store`, formData)
       .then(
         response => {
-          const { data } = response;
-          let { success, error } = this.state;
-          if (data.status === 'success') {
-            success = data.message;
-            this.setState({ success });
-            setTimeout(() => {
-              this.setState({ success: ''});
+            const { data } = response;
+            let { error } = this.state;
+            if (data.status === 'success') {
+                console.log('data.status', data.status);
+                this.setState({ success: data.message });
+                setTimeout(() => {
+                    this.setState({ success: ''});
             }, 2000);
           }else{
             console.log('errors', data.errors);
-            if (data.error_date !== '') {
-                error = data.error_date;
-            }
-            else if (data.errors['nom_marque'] !== undefined) {
+
+            if (data.errors['nom_marque'] !== undefined) {
               error = data.errors['nom_marque'][0];
             }
             else if (data.errors['modele'] !== undefined) {
@@ -174,6 +171,12 @@ class CreateAutomobile extends Component {
             else if (data.errors['photo'] !== undefined) {
               error = data.errors['photo'][0];
             }
+            else if (data.errors['date_sortie' !== undefined]) {
+                error = data.errors['date_sortie'][0];
+            }
+            else if (data.errors['prix_null' !== undefined]) {
+                error = data.errors['prix_null'][0];
+            }
             else if( data.errors !== ""){
               error = data.errors;
             }
@@ -186,7 +189,7 @@ class CreateAutomobile extends Component {
     }
 
     render() {
-        const { marques, modelesMarque, error, isLoading } = this.state;
+        const { marques, modelesMarque, error, isLoading, success } = this.state;
         return (
             <div className="row">
                 <div className="col-md-2"></div>
@@ -200,6 +203,10 @@ class CreateAutomobile extends Component {
                                 {
                                   error !== "" ? <div className="col-12 text-danger mb-2 mt-2 text-center">{ error }</div> : ""
                                 }
+                                {
+                                  success !== "" ? <div className="col-12 text-danger mb-2 mt-2 text-center">{ success }</div> : ""
+                                }
+
                                     <div className="column">
                                         <div className="row">
                                             <div className="col-md-2"></div>
@@ -208,7 +215,7 @@ class CreateAutomobile extends Component {
                                                     <label>Marque</label>
                                                     <select
                                                         name="nom_marque" value={this.state.nom_marque}
-                                                        onChange={this.onHandleChange} className="form-control dynamic">
+                                                        onChange={this.onHandleChange} className="form-control">
                                                         <option>Veuillez sélectionner une marque</option>
                                                         {
                                                             marques.map((marque, i) =>
@@ -220,13 +227,13 @@ class CreateAutomobile extends Component {
                                             </div>
                                         </div>
 
-                                        <div className='row'>
-                                            <div className='col-md-2'></div>
-                                            <div className='col-md-8 pr-1'>
-                                                <div className='form-group'>
+                                        <div className="row">
+                                            <div className="col-md-2"></div>
+                                            <div className="col-md-8 pr-1">
+                                                <div className="form-group">
                                                     <label>Modèl</label>
-                                                    <select value={this.state.modele} name='modele'
-                                                     onChange={this.onHandleChange} className='form-control'>
+                                                    <select value={this.state.modele} name="modele"
+                                                    onChange={this.onHandleChange} className="form-control">
                                                         <option value="">Veuillez sélectionner un modèl</option>
                                                         {
                                                             modelesMarque.length > 0 ?
@@ -259,9 +266,11 @@ class CreateAutomobile extends Component {
                                             <div className="col-md-8 pr-1">
                                                 <div className="form-group">
                                                     <label>Annee de sortie</label>
-                                                    <YearPicker onChange={this.onHandleChange} className="form-control yearpicker" name="sortie" value={this.state.sortie}  />
-{/*                                                     <input onChange={this.onHandleChange} type="text" className="form-control yearpicker" name="sortie" value={this.state.sortie} />
- */}                                                </div>
+
+                                                    {/* <YearPicker onChange={this.onHandleChange} className="form-control" name="sortie" value={this.state.sortie}  />
+ */}
+                                                    <input onChange={this.onHandleChange} type="text" className="form-control yearpicker" name="sortie" value={this.state.sortie} />
+                                                 </div>
                                             </div>
                                         </div>
 
@@ -272,8 +281,8 @@ class CreateAutomobile extends Component {
                                                 <label for="">Priorité</label>
                                                 <select onChange={this.onHandleChange} className="form-control" name="priorite" value={this.state.priorite} >
                                                     <option>Sélectionnez la priorité d'affichage</option>
-                                                    <option value="0">Dans Achat</option>
                                                     <option value="1">Dans accueil</option>
+                                                    <option value="0">Dans Achat</option>
                                                 </select>
                                                 </div>
                                             </div>
@@ -295,7 +304,7 @@ class CreateAutomobile extends Component {
                                             <div className="col-md-8 pr-1">
                                                 <div className="form-group">
                                                     <label>Photo</label>
-                                                    <input onChange={this.onHandleChange} value={this.state.photo} type="file" multiple className="form-control-file" name="photo" aria-describedby="fileHelpId" />
+                                                    <input onChange={this.onHandleChange} type="file" className="form-control-file" name="photo" aria-describedby="fileHelpId" />
 
                                                 </div>
                                             </div>

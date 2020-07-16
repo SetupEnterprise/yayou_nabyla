@@ -75,13 +75,6 @@ class AutomobileController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->sortie > date('Y')) {
-            return response()->json([
-                'status' => 'error',
-                'error_date' => "L'année de sortie ne peut être supérieure à ".date('Y')
-            ], 200);
-        }
-
         $validator = Validator::make($request->all(), [
             'nom_marque' => 'required',
             'modele' => 'required',
@@ -89,9 +82,9 @@ class AutomobileController extends Controller
             'sortie' => 'required',
             'priorite' => 'required',
             'prix' => 'required|integer',
-            'photo' => 'required|image',
+            /* 'photo' => 'required|mimes:jpg,jpeg,png,bmp,gif,svg,webp'
+            'photo' => 'required|mimes:jpg|image', */
         ]);
-
 
         if($validator->fails()) {
             return response()->json([
@@ -100,58 +93,53 @@ class AutomobileController extends Controller
             ], 200);
         }
 
-        $images = $request->file('photo');
+        if ($request->prix <= 0) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['prix_null' => ['Le prix de l\'automobile ne peut être null ou négatif']]
+            ], 200);
+        }
 
-        foreach ($images as $img ) {
-            // Definir le chemin du fichier
-            $destinationPath = public_path('image_auto/'); // upload path
-            $image = date('dmYHis') . "." . $img->getClientOriginalExtension();
-
-            $img->move($destinationPath, $image);
-            $insert['image'] = $image;
+        if ($request->sortie > date('Y')) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['date_sortie' => ['L\'année de sortie ne peut être supérieure à '.date('Y')]]
+            ], 200);
         }
 
 
-            /* $files = $request->file('photo');
+        if ($files = $request->file('photo'))
+        {
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
             $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
-            //Pour voir le couleur choisi
-            $couleur = Couleur::where('nom', $request->couleur)->first();
-            //Avoir l'ID marque
-            $str = strtok($request->marque, "-");
-            $marque = $str;
-            $version = $str = strtok("-");
+            $files->move($destinationPath, $image_auto);
+            $insert['image'] = "$image_auto";
 
-            $marque = DB::table('marques')
-                ->where('nom_marque',$marque)
-                ->join('modeles','modeles.marque_id','=','marques.id')
-                ->where('modeles.version', $version)
-                ->first();
-            //Creation d'automobile
-            if($marque->id && $couleur){
-                $automobile = Automobile::create([
+            //Insertion dans la base
+            //Add table automobiles
+            $automobile = Automobile::create([
+                'annee_sortie' => $request->sortie,
+                'estVendu' => false,
+                'date_vente' => null,
+                'prix' => $request->prix,
+                'priorite' => $request->priorite,
+                'couleur_id' => 1,
+                'marque_id' => $request->nom_marque
+            ]);
 
-                    'annee_sortie' => (int)substr($request->annee_sortie,-4),
-                    'estVendu' => false,
-                    'date_vente' => null,
-                    'prix' => $request->prix,
-                    'priorite' => $request->priorite,
-                    'couleur_id' => $couleur->couleur_id,
-                    'marque_id' => $marque->id
-                ]);
-            }
             if($automobile){
                 $photo = Photo::create([
                     'photo_profil' => $image_auto,
                     'automobile_id' => $automobile->id
                 ]);
-            }
 
-            $files->move($destinationPath, $image_auto);
-            $insert['image'] = "$image_auto";
-            session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
-            return redirect()->route('automobile.index'); */
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Automobile ajouté avec succès'
+                ], 200);
+            }
+        }
     }
 
     /**

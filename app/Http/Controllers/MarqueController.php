@@ -47,7 +47,7 @@ class MarqueController extends Controller
             'logo' => 'image',
         ]);
 
-       if( $files = $request->file('logo')){
+        if( $files = $request->file('logo')){
             // Definir le chemin du fichier
             $destinationPath = public_path('logo_marque/'); // upload path
             $logo = date('dmYHis') . "." . $files->getClientOriginalExtension();
