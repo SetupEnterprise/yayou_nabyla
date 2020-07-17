@@ -88,7 +88,7 @@ class CreateAutomobile extends Component {
               break;
 
             case 'photo':
-              this.setState({ photo: e.target.files });
+              this.setState({ photo: e.target.files[0] });
               console.log('photo', photo);
               break;
 
@@ -140,13 +140,15 @@ class CreateAutomobile extends Component {
       .then(
         response => {
             const { data } = response;
-            let { error } = this.state;
+            let { success, error } = this.state;
             if (data.status === 'success') {
-                console.log('data.status', data.status);
-                this.setState({ success: data.message });
+                success = data.message;
+                this.setState({ success });
+                const { nom_marque, modele, couleur, sortie, priorite, prix, photo } = this.state;
+                this.setState({ nom_marque: '', modele: '', couleur: '', sortie: '', prix: 0, photo: null, priorite: '' });
                 setTimeout(() => {
                     this.setState({ success: ''});
-            }, 2000);
+            }, 3000);
           }else{
             console.log('errors', data.errors);
 
@@ -204,7 +206,7 @@ class CreateAutomobile extends Component {
                                   error !== "" ? <div className="col-12 text-danger mb-2 mt-2 text-center">{ error }</div> : ""
                                 }
                                 {
-                                  success !== "" ? <div className="col-12 text-danger mb-2 mt-2 text-center">{ success }</div> : ""
+                                  success !== "" ? <div className="col-12 text-success mb-2 mt-2 text-center">{ success }</div> : ""
                                 }
 
                                     <div className="column">

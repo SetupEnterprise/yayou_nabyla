@@ -19,8 +19,9 @@ class MarqueController extends Controller
     {
         $marques = DB::table('marques')
         ->get();
+        $taille = count($marques);
        // dd($marques);
-        return view('marque.index', compact('marques'));
+        return view('marque.index', compact('marques', 'taille'));
     }
 
     /**
@@ -44,7 +45,7 @@ class MarqueController extends Controller
         //Gestion d'erreur
         $request->validate([
             'nom_marque' => 'required|min:2|unique:marques',
-            'logo' => 'image',
+            /* 'logo' => 'mimetypes:jpeg,png,svg,jpg,gif', */
         ]);
 
         if( $files = $request->file('logo')){
@@ -53,16 +54,18 @@ class MarqueController extends Controller
             $logo = date('dmYHis') . "." . $files->getClientOriginalExtension();
 
             $files->move($destinationPath, $logo);
-            $insert['image'] = $logo;
+            $insert['image'] = "$logo";
 
             //Insertion dans la base de donnees
             $marque = Marque::create([
                 'nom_marque' => strtoupper($request->nom_marque),
                 'logo' => $logo ?? null
             ]);
+            if ($marque) {
+                session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
+                return redirect()->route('marque.index');
+            }
 
-            session()->flash('message', "L'automobile ".$request->marque." ".$request->version." a été ajouté avec succès");
-            return redirect()->route('marque.index');
        }else{
            session()->flash('message', "Une erreur s'est produite lors de enregistrement de la marque");
             return redirect()->route('marque.index');

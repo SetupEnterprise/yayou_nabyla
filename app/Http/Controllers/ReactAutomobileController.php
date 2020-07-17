@@ -15,19 +15,15 @@ class ReactAutomobileController extends Controller
     public function index()
     {
         $automobiles = DB::table('automobiles')
-                        ->join('marques','automobiles.id','=','marques.automobile_id')
-                        ->join('modeles','modeles.marque_id','=','marques.id')
-                        ->join('couleurs', 'couleurs.automobile_id', '=', 'automobiles.id')
+                        ->join('marques','automobiles.marque_id','=','marques.id')
+                        ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
+                        ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
                         ->take(6)
                         ->get();
 
         $nbre_auto = DB::table('automobiles')
                         ->get();
-        foreach($automobiles as $auto){
-            $auto->priorite = ((int)$auto->priorite*100)/10;
-            //dd($auto);
-        }
 
         //Reponse coté React
         return response()->json([
@@ -35,6 +31,17 @@ class ReactAutomobileController extends Controller
             'automobiles' => $automobiles,
             'nbre_auto' => count($nbre_auto)
         ], 200);
+    }
+
+    public function trie_par_prix()
+    {
+        $automobiles = DB::table('automobiles')
+                ->join('marques','automobiles.marque_id','=','marques.id')
+                ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
+                ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
+                ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
+                ->orderBy('automobiles.prix', 'asc')
+                ->get();
     }
 
     /**

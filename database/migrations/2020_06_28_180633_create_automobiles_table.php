@@ -16,10 +16,10 @@ class CreateAutomobilesTable extends Migration
         Schema::create('automobiles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->year('annee_sortie')->nullable();
-            $table->boolean('estVendu');
+            $table->boolean('estVendu')->nullable();
             $table->date('date_vente')->nullable();
             $table->integer('prix');
-            $table->string('priorite');
+            $table->boolean('priorite');
             $table->timestamps();
         });
     }

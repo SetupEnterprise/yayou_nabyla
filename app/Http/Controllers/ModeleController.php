@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Marque;
 use App\models\Modele;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,16 +12,15 @@ class ModeleController extends Controller
     public function index()
     {
         $modeles = DB::table('modeles')
-        ->join('marques','modeles.marque_id','=','marques.id')
-        ->get();
-       // dd($modeles);
-        return view('modele.index', compact('modeles'));
+            ->join('marques','modeles.marque_id','=','marques.id')
+            ->get();
+        $taille = count($modeles);
+        return view('modele.index', compact('modeles', 'taille'));
     }
 
     public function create()
     {
-        $marques = DB::table('marques')
-        ->get();
+        $marques = Marque::orderBy('nom_marque','asc')->get();
         return view('modele.create', compact('marques'));
     }
 

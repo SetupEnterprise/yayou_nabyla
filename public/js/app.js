@@ -79964,7 +79964,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
 
         case 'photo':
           this.setState({
-            photo: e.target.files
+            photo: e.target.files[0]
           });
           console.log('photo', photo);
           break;
@@ -80030,20 +80030,41 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       formData.append('photo', this.state.photo);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/automobile/store", formData).then(function (response) {
         var data = response.data;
-        var error = _this4.state.error;
+        var _this4$state = _this4.state,
+            success = _this4$state.success,
+            error = _this4$state.error;
 
         if (data.status === 'success') {
-          console.log('data.status', data.status);
+          success = data.message;
 
           _this4.setState({
-            success: data.message
+            success: success
+          });
+
+          var _this4$state2 = _this4.state,
+              nom_marque = _this4$state2.nom_marque,
+              modele = _this4$state2.modele,
+              couleur = _this4$state2.couleur,
+              sortie = _this4$state2.sortie,
+              priorite = _this4$state2.priorite,
+              prix = _this4$state2.prix,
+              _photo = _this4$state2.photo;
+
+          _this4.setState({
+            nom_marque: '',
+            modele: '',
+            couleur: '',
+            sortie: '',
+            prix: 0,
+            photo: null,
+            priorite: ''
           });
 
           setTimeout(function () {
             _this4.setState({
               success: ''
             });
-          }, 2000);
+          }, 3000);
         } else {
           console.log('errors', data.errors);
 
@@ -80109,7 +80130,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       }, error !== "" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-12 text-danger mb-2 mt-2 text-center"
       }, error) : "", success !== "" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-12 text-danger mb-2 mt-2 text-center"
+        className: "col-12 text-success mb-2 mt-2 text-center"
       }, success) : "", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "column"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

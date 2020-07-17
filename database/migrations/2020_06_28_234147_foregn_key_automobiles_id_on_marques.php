@@ -15,9 +15,16 @@ class ForegnKeyAutomobilesIdOnMarques extends Migration
     {
         Schema::table('automobiles', function (Blueprint $table) {
             $table->unsignedBigInteger('marque_id')->after('priorite');
+            $table->unsignedBigInteger('modele_id')->after('marque_id');
             $table->foreign('marque_id')
                  ->references('id')
                  ->on('marques')
+                 ->onDelete('cascade')
+                 ->onUpdate('cascade');
+
+            $table->foreign('modele_id')
+                 ->references('modele_id')
+                 ->on('modeles')
                  ->onDelete('cascade')
                  ->onUpdate('cascade');
         });

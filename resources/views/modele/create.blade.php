@@ -58,7 +58,7 @@
                                     <label>Description</label>
                                     <textarea
                                         class="form-control" name="description"
-                                        placeholder="Saisir la description du véhicule">
+                                        placeholder="Saisir la description du véhicule" value={{ old('description') }}>
                                     </textarea>
                                     @if ($errors->has('description'))
                                         <span class="custom-control-description text-danger">

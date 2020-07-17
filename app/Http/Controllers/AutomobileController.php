@@ -24,15 +24,16 @@ class AutomobileController extends Controller
     {
         $automobiles = DB::table('automobiles')
                         ->join('marques','automobiles.marque_id','=','marques.id')
-                        ->join('modeles','modeles.marque_id','=','marques.id')
+                        ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                         ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                        ->get(['automobiles.id','marques.nom_marque','version', 'prix', 'priorite','estVendu', 'annee_sortie']);
+                        ->get(
+                            ['automobiles.id','marques.nom_marque','marques.logo', 'photos.photo_profil',
+                            'version', 'prix', 'priorite','estVendu', 'annee_sortie']
+                            );
+        $taille = count($automobiles);
 
-        foreach($automobiles as $auto){
-            $auto->priorite = ((int)$auto->priorite*100)/10;
-        }
-        return view('layouts/index', compact('automobiles'));
+        return view('layouts/index', compact('automobiles', 'taille'));
     }
 
     /**
@@ -47,9 +48,7 @@ class AutomobileController extends Controller
 
     public function getMarques()
     {
-        $marques = DB::table('marques')
-            ->join('modeles','modeles.marque_id','=','marques.id')
-            ->get();
+        $marques = Marque::orderBy('nom_marque','asc')->get();
 
         return response()->json([
             'status' => 'success',
@@ -113,8 +112,7 @@ class AutomobileController extends Controller
             // Definir le chemin du fichier
             $destinationPath = public_path('image_auto/'); // upload path
             $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $image_auto);
-            $insert['image'] = "$image_auto";
+
 
             //Insertion dans la base
             //Add table automobiles
@@ -125,7 +123,8 @@ class AutomobileController extends Controller
                 'prix' => $request->prix,
                 'priorite' => $request->priorite,
                 'couleur_id' => 1,
-                'marque_id' => $request->nom_marque
+                'marque_id' => $request->nom_marque,
+                'modele_id' => $request->modele
             ]);
 
             if($automobile){
@@ -134,10 +133,14 @@ class AutomobileController extends Controller
                     'automobile_id' => $automobile->id
                 ]);
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Automobile ajouté avec succès'
-                ], 200);
+            //Ecriture du fichier sur disque
+            $files->move($destinationPath, $image_auto);
+            $insert['image'] = "$image_auto";
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Automobile ajouté avec succès'
+            ], 200);
             }
         }
     }
