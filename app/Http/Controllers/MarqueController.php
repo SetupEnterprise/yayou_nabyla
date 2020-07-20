@@ -108,37 +108,17 @@ class MarqueController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(!$request->logo){
 
             $marque = Marque::where('id', $id)
                     ->update([
                     'nom_marque' => $request->marque,
                     ]);
-
             if($marque){
-            Modele::where('marque_id', $id)
-                    ->update([
-                    'version' => $request->version,
-                    'description' => $request->description,
-                    ]);
-                    }
-
-                return redirect()->route('marque.index');
-        }else{
-            ($files = $request->file('logo'));
-            // Definir le chemin du fichier
-            $destinationPath = public_path('image_auto/'); // upload path
-            $logo = date('dmYHis') . "." . $files->getClientOriginalExtension();
-
-            Marque::where('id',$id)
-                    ->update([
-                        'logo' => $logo,
-                    ]);
-            $files->move($destinationPath, $logo);
-            $insert['image'] = "$logo";
+                session()->flash('message', "La marque a été modifie avec succès");
+            }
             return redirect()->route('marque.index');
         }
-    }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -146,8 +126,7 @@ class MarqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         Marque::destroy($id);
         return redirect()->route('marque.index');
     }

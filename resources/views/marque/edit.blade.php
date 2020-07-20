@@ -43,11 +43,10 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-md-4 pl-1"></div>
                                 <div class="form-group">
                                     <input type="submit" class="btn btn-info btn-fill pull-right" value="Mise à jour Marque">
-                                 </div>
+                                </div>
                         </div>
                        
                     </form>
