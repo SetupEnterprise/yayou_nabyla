@@ -9,6 +9,14 @@
     <div class="row">
         <div class="col-md-0.5"></div>
         <div class="col-md-12">
+            @if (session()->has('erreur_extension'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{session('erreur_extension')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            @endif
           <div class="card shadow">
             <div class="card-header border-0">
                 <h3 class="mb-0">Total Automobile(s) {{ $taille }}</h3>
@@ -69,34 +77,61 @@
                                     </td>
                                     <td class="text-right">
                                         <!-- Default dropup button -->
+                                        <a class="btn btn-primary text-white" data-toggle="modal" data-target="#staticBackdrop">
+                                            Ajouter plus d'images
+                                        </a>
                                         <div class="btn-group dropup">
-                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Dropup
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <!-- Dropdown menu links -->
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                        </div>
-                                        {{-- <div class="dropdown">
-                                            <a
-                                                class="btn btn-sm btn-icon-only text-light bg-primary dropdown-toggle"
-                                                href="#" role="button" data-toggle="dropdown" id="dropdownMenuLink"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" href="{{route('automobile.edit', $auto->id)}}">Modifier</a>
-                                                <form action="{{ route('automobile.destroy', $auto->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
-                                                    {{csrf_field() }}
-                                                    {{ method_field('DELETE')}}
-                                                    <input type="submit" class="dropdown-item" name="Supprimer" value="Supprimer">
-                                                </form>
+                                            <button type="button" class="btn btn-primary">
+                                                actions
+                                            </button>
+                                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <!-- Dropdown menu links -->
+                                                <a class="dropdown-item" href="#">Ajouter plus d'images</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </td>
+                                    {{-- Modal ici --}}
+                                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">{{$auto->nom_marque}} {{$auto->version}}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="POST" action="{{ route('images') }}" enctype="multipart/form-data">
+                                                        {{ csrf_field() }}
+                                                        <div class="form-group">
+                                                          <input type="hidden" class="form-control" name="automobile_id" value="{{ $auto->automobile_id }}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <i class="fas fa-images"></i>
+                                                            <label for="exampleFormControlFile1">Ajouter un ou plusieurs images</label>
+                                                            <input type="file" class="form-control-file" name="images[]" multiple id="exampleFormControlFile1">
+                                                            @if ($errors->has('images'))
+                                                                <span class="custom-control-description text-danger">
+                                                                    {{ $errors->first('images')}}
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal" >Fermer</button>
+                                                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -136,4 +171,5 @@
           </div>
         </div>
     </div>
+
 @endsection

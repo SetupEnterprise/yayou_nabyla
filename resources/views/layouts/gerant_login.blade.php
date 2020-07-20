@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>APP YAYOU_NABILA- Login</title>
+  <title>YAYOU NABYLA | Connexion</title>
 
   <!-- Custom fonts for this template-->
   <link href="{{asset('theme-asset/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -56,11 +56,11 @@
                       <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" value="{{old('password') ?? ''}}" placeholder="Mot de passe">
                       {!! $errors->first('password', '<p style="color: red">:message</p>')!!}
                     </div>
-                    
+
                     <input type="submit" class="btn btn-success btn-user btn-block" value="Se Connecter">
-                   
+
                   </form>
-                  
+
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\models\Couleur;
-use App\Http\Requests\AutomobileFormRequest;
+use Illuminate\Support\Str;
 use App\models\Modele;
 use App\models\Marque;
 use App\models\Automobile;
@@ -27,13 +27,58 @@ class AutomobileController extends Controller
                         ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                         ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                        ->get(
-                            ['automobiles.id','marques.nom_marque','marques.logo', 'photos.photo_profil',
-                            'version', 'prix', 'priorite','estVendu', 'annee_sortie']
-                            );
+                        ->get();
         $taille = count($automobiles);
+        //dd($automobiles);
 
         return view('layouts/index', compact('automobiles', 'taille'));
+    }
+
+    public function add_more_img(Request $request)
+    {
+        //dd($request->automobile_id);
+        $this->validate($request, [
+        'images'=>'required',
+        ]);
+        $erreur = 0;
+        if($request->hasFile('images'))
+        {
+            $allowedfileExtension=['jpeg','jpg','png','svg', 'gif', 'webp', 'bmp'];
+            $files = $request->file('images');
+            $tableau_img = array();
+            foreach($files as $file){
+                //$filename = $file->getClientOriginalName();
+                $destinationPath = public_path('image_auto/'); // upload path
+                $extension = Str::lower($file->getClientOriginalExtension());
+                $check = in_array($extension,$allowedfileExtension);
+                //dd($check);
+                if($check)
+                {
+                    //array_push($tableau_img, $request->images);
+                }
+                else
+                {
+                    $erreur ++;
+                }
+            }
+            if ($erreur > 0) {
+                session()->flash('erreur_extension', "Seul ces formats d'images sont pris en chage png, jpg, jpeg, svg, gif, webp, bmp");
+                return redirect()->route('automobile.index');
+            }else{
+                //dd($request->images);
+                foreach ($request->images as $photo) {
+                    $filename = $photo->store('image_auto');
+                    Photo::create([
+                        'automobile_id' => $request->automobile_id,
+                        'nom_photo' => $filename,
+                        'photo_profil' => ''
+                    ]);
+                }
+                session()->flash('message', "Les images ont été ajouté avec succès");
+                return redirect()->route('automobile.index');
+            }
+        }
+
     }
 
     /**

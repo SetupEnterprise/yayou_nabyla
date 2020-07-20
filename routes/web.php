@@ -30,6 +30,8 @@ Route::resource('automobile','AutomobileController')->middleware(ConnectionSessi
 
 Route::post('automobile/store','AutomobileController@store')->middleware(ConnectionSession::class);
 
+Route::post('add_more_img', 'AutomobileController@add_more_img')->name('images');
+
 Route::get('/getMarques', 'AutomobileController@getMarques')->middleware(ConnectionSession::class);
 
 Route::get('/getModelesMarque/{id}', 'AutomobileController@getModelesMarque')->middleware(ConnectionSession::class);
