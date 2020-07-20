@@ -27,6 +27,7 @@ class AutomobileController extends Controller
                         ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                         ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
+                        ->where('photos.photo_profil','!=', '')
                         ->get();
         $taille = count($automobiles);
         //dd($automobiles);

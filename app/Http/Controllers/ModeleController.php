@@ -24,6 +24,14 @@ class ModeleController extends Controller
         return view('modele.create', compact('marques'));
     }
 
+    public function show($id)
+    {
+        $modele = Modele::where('modele_id', '=', $id)
+                ->get();
+
+        return view('modele.show', compact('modele'));
+    }
+
     public function store(Request $request)
     {
         //Gestion d'erreur
@@ -63,7 +71,7 @@ class ModeleController extends Controller
     }
 
     public function destroy($id){
-        $delete = Modele::where('modele_id',$id)->delete();    
+        $delete = Modele::where('modele_id',$id)->delete();
         if($delete){
             session()->flash('message', "Le modèle  a été supprimé avec succès");
         }

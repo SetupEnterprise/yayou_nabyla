@@ -216,6 +216,9 @@
 <script src="{{ asset('/js/notification.js')}}"></script>
 
     <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         $(document).ready(function() {
 
             notification.showNotification();

@@ -34,6 +34,8 @@
                                 <th scope="col">Annee de sortie</th>
                                 <th scope="col">Afficher dans</th>
                                 <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,10 +77,17 @@
                                         @endif
 
                                     </td>
+
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-success text-white"
+                                            data-toggle="tooltip" data-placement="top" title="Cliquez pour voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
                                     <td class="text-right">
                                         <!-- Default dropup button -->
                                         <a class="btn btn-primary text-white" data-toggle="modal" data-target="#staticBackdrop">
-                                            Ajouter plus d'images
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
                                         </a>
                                         <div class="btn-group dropup">
                                             <button type="button" class="btn btn-primary">

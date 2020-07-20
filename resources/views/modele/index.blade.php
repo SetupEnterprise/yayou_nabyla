@@ -20,11 +20,12 @@
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                            <th scope="col">Logo</th>
-                            <th scope="col">Marque</th>
-                            <th scope="col">Modèl</th>
-                            <th></th>
-                            <th></th>
+                                <th scope="col">Logo</th>
+                                <th scope="col">Marque</th>
+                                <th scope="col">Modèl</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,22 +34,34 @@
                                 <th scope="row">
                                     <div class="media align-items-center">
                                       <a href="#" class="avatar rounded-circle mr-3">
-                                          <img class="avatar rounded-circle" alt="Image placeholder" src="logo_marque/{{$modele->logo}}"/>
+                                          <img class="avatar rounded-circle" alt="Image" src="logo_marque/{{$modele->logo}}"/>
                                       </a>
                                     </div>
                                 </th>
 
                                 <td>
-                                  <span class="mb-0 text-sm font-weight-bold">{{$modele->nom_marque}}</span>
+                                  <span class="mb-0 text-sm font-weight-bold text-center">{{$modele->nom_marque}}</span>
                                 </td>
 
                                 <td>
-                                  <span class="mb-0 text-sm font-weight-bold">{{$modele->version}}</span>
+                                  <span class="mb-0 text-sm font-weight-bold text-center">{{$modele->version}}</span>
                                 </td>
-                                <td class="text-right">
+
+                                <td>
+                                    <a href="{{ route('modele.show', $modele->modele_id) }}" class="btn btn-sm btn-icon-only bg-success text-white"
+                                        data-toggle="tooltip" data-placement="top" title="Cliquez pour voir">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+
+
+                                <td>
                                     <div class="dropdown">
-                                        <a class="btn btn-sm btn-icon-only text-light bg-primary"  href="#" data-toggle="modal" data-target="#staticBackdrop{{$modele->modele_id}}">
-                                        <i class="fas fa-ellipsis-v"></i>
+                                        <a class="btn btn-sm btn-icon-only bg-primary text-white"
+                                            href="#" data-toggle="modal"
+                                            data-target="#staticBackdrop{{$modele->modele_id}}"
+                                            data-toggle="tooltip" data-placement="top" title="Cliquez pour modifier">
+                                            <i class="fa fa-pen "></i>
                                         </a>
                                     </div>
                                 </td>
@@ -56,7 +69,12 @@
                                     <form action="{{ route('modele.destroy', $modele->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce modele ?')">
                                         {{csrf_field() }}
                                         {{ method_field('DELETE')}}
-                                        <button type="submit" class ="btn btn-sm btn-icon-only text-light bg-primary"><i class="fas fa-search"></i></button>
+                                        <button
+                                            type="submit" class="btn btn-sm btn-icon-only bg-danger text-white"
+                                            data-toggle="tooltip" data-placement="top" title="Cliquez pour supprimer">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+
+                                        </button>
                                     </form>
                                 </td>
                                 <!-- Modal -->
@@ -82,7 +100,7 @@
                                                 <div class="form-group">
                                                     <textarea class="form-control" required name="description">{{$modele->description}}</textarea>
                                                 </div>
-                                               
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal" >Annuler</button>
