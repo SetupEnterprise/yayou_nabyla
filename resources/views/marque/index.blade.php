@@ -41,20 +41,40 @@
                                     </td>
                                     <td class="text-right">
                                         <div class="dropdown">
-                                            <a class="btn btn-sm btn-icon-only text-light" style="background-color: #eaecf4" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <a class="btn btn-sm btn-icon-only text-light bg-primary"  href="#" data-toggle="modal" data-target="#staticBackdrop{{$marque->id}}">
                                             <i class="fas fa-ellipsis-v"></i>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" href="{{route('marque.edit', $marque->id)}}">Modifier</a>
-                                            <form action="{{ route('marque.destroy', $marque->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
-                                                {{csrf_field() }}
-                                                {{ method_field('DELETE')}}
-                                                <input type="submit" class="dropdown-item" name="Supprimer" value="Supprimer">
-                                            </form>
-
+                                        </div>
+                                    </td>
+                                   
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop{{$marque->id}}" data-backdrop="static" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">{{$marque->nom_marque}}</h5><br>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ route('marque.update', $marque->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous modifier ce modèle?')">
+                                            <div class="modal-body">
+                                                    {{csrf_field() }}
+                                                    {{method_field('PUT')}}
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="marque" value="{{$marque->nom_marque}}"  required>
+                                                    </div>
+                                                   
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" >Annuler</button>
+                                                <input type="submit" class="btn btn-primary" name="" value="modifier">
+                                            </div>
+                                        </form>
+    
                                             </div>
                                         </div>
-                                        </td>
+                                    </div>
                                 </tr>
                             @endforeach
                         </tbody>

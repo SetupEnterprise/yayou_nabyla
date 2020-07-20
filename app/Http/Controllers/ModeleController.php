@@ -50,4 +50,24 @@ class ModeleController extends Controller
 
 
     }
+
+    public function update(Request $request, $id){
+        $modele = Modele::where('modele_id',$id)->update([
+            'version' => $request->version,
+            'description' => $request->description
+            ]);
+            if($modele){
+                session()->flash('message', "Le modèle ".$request->version." a été modifié avec succès");
+            }
+            return redirect()->route('modele.index');
+    }
+
+    public function destroy($id){
+        $delete = Modele::where('modele_id',$id)->delete();    
+        if($delete){
+            session()->flash('message', "Le modèle  a été supprimé avec succès");
+        }
+        return redirect()->route('modele.index');
+
+    }
 }

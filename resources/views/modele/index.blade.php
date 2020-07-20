@@ -11,7 +11,7 @@
       <div class="col-md-10">
           <div class="card shadow">
             <div class="card-header border-0">
-                <a class="btn btn-primary" href="{{route('modele.create')}}">Nouveau modèl</a>
+                <a class="btn btn-primary" href="{{route('modele.create')}}">Nouveau modèle</a>
             </div>
 
             <div class="table-responsive">
@@ -23,6 +23,7 @@
                             <th scope="col">Logo</th>
                             <th scope="col">Marque</th>
                             <th scope="col">Modèl</th>
+                            <th></th>
                             <th></th>
                             </tr>
                         </thead>
@@ -46,38 +47,49 @@
                                 </td>
                                 <td class="text-right">
                                     <div class="dropdown">
-                                        <a class="btn btn-sm btn-icon-only text-light bg-primary"  href="#" data-toggle="modal" data-target="#staticBackdrop">
+                                        <a class="btn btn-sm btn-icon-only text-light bg-primary"  href="#" data-toggle="modal" data-target="#staticBackdrop{{$modele->modele_id}}">
                                         <i class="fas fa-ellipsis-v"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                        <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" href="#">Voir la description</a>
-                                        <a class="dropdown-item" href="{{route('modele.edit', $modele->modele_id)}}">Modifier</a>
-                                        <form action="{{ route('modele.destroy', $modele->modele_id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce automobile')">
-                                            {{csrf_field() }}
-                                            {{ method_field('DELETE')}}
-                                            <input type="submit" class="dropdown-item" name="Supprimer" value="Supprimer">
-                                        </form>
-
-                                        </div>
                                     </div>
                                 </td>
-
+                                <td>
+                                    <form action="{{ route('modele.destroy', $modele->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous supprimer ce modele ?')">
+                                        {{csrf_field() }}
+                                        {{ method_field('DELETE')}}
+                                        <button type="submit" class ="btn btn-sm btn-icon-only text-light bg-primary"><i class="fas fa-search"></i></button>
+                                    </form>
+                                </td>
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdrop{{$modele->modele_id}}" data-backdrop="static" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">{{$modele->nom_marque}} - {{$modele->version}}</h5>
+                                            <h5 class="modal-title" id="staticBackdropLabel">{{$modele->nom_marque}} - {{$modele->version}}</h5><br>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
+                                        <form action="{{ route('modele.update', $modele->modele_id) }}" method="POST" class="inline-block" onsubmit="return confirm('Voulez vous modifier ce modèle?')">
                                         <div class="modal-body">
-                                            {{$modele->description}}
+                                                {{csrf_field() }}
+                                                {{method_field('PUT')}}
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="marque" value="{{$modele->nom_marque}}" disabled required>
+                                                </div>
+                                                <div class="form-group">
+                                                <input type="text" class="form-control" name="version" value="{{$modele->version}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea class="form-control" required name="description">{{$modele->description}}</textarea>
+                                                </div>
+                                               
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal" >Fermer</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" >Annuler</button>
+                                            <input type="submit" class="btn btn-primary" name="" value="modifier">
                                         </div>
+                                    </form>
+
                                         </div>
                                     </div>
                                 </div>
