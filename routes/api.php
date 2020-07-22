@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Afficher la liste des véhicules
 Route::get('automobiles', 'ReactAutomobileController@index');
 Route::get('trie_par_prix', 'ReactAutomobileController@trie_par_prix');
+Route::get('getPriorite/{priorite}', 'ReactAutomobileController@getPriorite');
+Route::get('filterBy/{nom}', 'ReactAutomobileController@filterBy');

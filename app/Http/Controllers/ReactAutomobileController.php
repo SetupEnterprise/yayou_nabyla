@@ -19,7 +19,8 @@ class ReactAutomobileController extends Controller
                         ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                         ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                         ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                        ->take(6)
+                        ->where('photos.photo_profil','!=', '')
+                        ->orderBy('automobiles.created_at', 'desc')
                         ->get();
 
         $nbre_auto = DB::table('automobiles')
@@ -28,20 +29,53 @@ class ReactAutomobileController extends Controller
         //Reponse coté React
         return response()->json([
             'status' => 'success',
-            'automobiles' => $automobiles,
-            'nbre_auto' => count($nbre_auto)
+            'automobiles' => $automobiles
         ], 200);
     }
 
-    public function trie_par_prix()
+    public function filterBy($nom)
+    {
+        $table = "";
+        if ($nom == "prix" || $nom == "annee_sorti") {
+            $table = 'automobiles';
+        }
+        else if ($nom == "nom_marque") {
+            $table = 'marques';
+        } else if ($nom == "version") {
+            $table = 'modeles';
+        }
+
+        $automobiles = DB::table('automobiles')
+                ->join('marques','automobiles.marque_id','=','marques.id')
+                ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
+                ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
+                ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
+                ->where('photos.photo_profil','!=', '')
+                ->orderBy($table.'.'.$nom, 'desc')
+                ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'automobiles' => $automobiles
+        ], 200);
+    }
+
+    public function getPriorite($priorite)
     {
         $automobiles = DB::table('automobiles')
                 ->join('marques','automobiles.marque_id','=','marques.id')
                 ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                 ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
                 ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                ->orderBy('automobiles.prix', 'asc')
+                ->where('photos.photo_profil','!=', '')
+                ->where('automobiles.priorite', '=', 1)
+                ->orderBy('automobiles.prix', 'desc')
                 ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'automobiles' => $automobiles
+        ], 200);
     }
 
     /**
