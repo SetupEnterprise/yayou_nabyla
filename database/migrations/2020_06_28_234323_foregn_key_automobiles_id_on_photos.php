@@ -14,7 +14,7 @@ class ForegnKeyAutomobilesIdOnPhotos extends Migration
     public function up()
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->unsignedBigInteger('automobile_id')->after('photo_profil');
+            $table->unsignedBigInteger('automobile_id')->after('nom_photo');
             $table->foreign('automobile_id')
                  ->references('id')
                  ->on('automobiles')

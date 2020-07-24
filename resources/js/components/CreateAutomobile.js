@@ -12,6 +12,7 @@ class CreateAutomobile extends Component {
         this.state = {
             marques: [],
             modelesMarque: [],
+            couleurs: [],
             nom_marque: '',
             modele: '',
             couleur: '',
@@ -28,6 +29,7 @@ class CreateAutomobile extends Component {
         this.onHandleChange = this.onHandleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.sendData = this.sendData.bind(this);
+        this.getCouleurs = this.getCouleurs.bind(this);
 
     }
 
@@ -41,6 +43,22 @@ class CreateAutomobile extends Component {
                 this.setState({ marques })
             }
         })
+
+        this.getCouleurs();
+    }
+
+    getCouleurs() {
+        axios.get(`/getCouleurs`)
+        .then(
+            response => {
+            const { data } = response;
+            if (data.status === 'success') {
+                let {couleurs} = data;
+                this.setState({ couleurs });
+                console.log('couleurs', couleurs);
+            }
+            }
+        )
     }
 
     getModelesMarque(marque_id) {
@@ -89,7 +107,6 @@ class CreateAutomobile extends Component {
 
             case 'photo':
               this.setState({ photo: e.target.files[0] });
-              console.log('photo', photo);
               break;
 
             default:
@@ -115,7 +132,7 @@ class CreateAutomobile extends Component {
         error = "Veuillez sélectionner la priorité de la voiture";
       }else if (prix === "" || prix <= 0) {
         error = "Veuillez saisir le montant";
-      }else if (photo === "") {
+      }else if (photo === null) {
         error = "Veuillez choisir une image";
       }
 
@@ -140,7 +157,7 @@ class CreateAutomobile extends Component {
       .then(
         response => {
             const { data } = response;
-            let { success, error } = this.state;
+            let { success } = this.state;
             if (data.status === 'success') {
                 success = data.message;
                 this.setState({ success });
@@ -149,49 +166,53 @@ class CreateAutomobile extends Component {
                 setTimeout(() => {
                     this.setState({ success: ''});
             }, 3000);
-          }else{
-            console.log('errors', data.errors);
-
-            if (data.errors['nom_marque'] !== undefined) {
-              error = data.errors['nom_marque'][0];
             }
-            else if (data.errors['modele'] !== undefined) {
-              error = data.errors['modele'][0];
+            else
+            {
+                let { error } = this.state;
+                if (data.errors['nom_marque'] !== "") {
+                    error = data.errors['nom_marque'][0];
+                }
+                else if (data.errors['modele'] !== "") {
+                    error = data.errors['modele'][0];
+                }
+                else if (data.errors['couleur'] !== "") {
+                    error = data.errors['couleur'][0];
+                }
+                else if (data.errors['sortie'] !== "") {
+                    error = data.errors['sortie'][0];
+                }
+                else if (data.errors['priorite'] !== "") {
+                    error = data.errors['priorite'][0];
+                }
+                else if (data.errors['prix'] !== "") {
+                    error = data.errors['prix'][0];
+                }
+                else if (data.errors['photo'] !== "") {
+                    error = data.errors['photo'][0];
+                }
+                else if (data.errors['date_sortie' !== ""]) {
+                    error = data.errors['date_sortie'][0];
+                }
+                else if (data.errors['prix_null' !== ""]) {
+                    error = data.errors['prix_null'][0];
+                }
+                else if (data.errors['format_img' !== ""]) {
+                    error = data.errors['format_img'][0];
+                }
+                /* else if( data.errors !== ""){
+                    error = data.errors;
+                } */
+                console.log('errrr', error);
+                this.setState({ error });
             }
-            else if (data.errors['couleur'] !== undefined) {
-              error = data.errors['couleur'][0];
-            }
-            else if (data.errors['sortie'] !== undefined) {
-              error = data.errors['sortie'][0];
-            }
-            else if (data.errors['priorite'] !== undefined) {
-              error = data.errors['priorite'][0];
-            }
-            else if (data.errors['prix'] !== undefined) {
-              error = data.errors['prix'][0];
-            }
-            else if (data.errors['photo'] !== undefined) {
-              error = data.errors['photo'][0];
-            }
-            else if (data.errors['date_sortie' !== undefined]) {
-                error = data.errors['date_sortie'][0];
-            }
-            else if (data.errors['prix_null' !== undefined]) {
-                error = data.errors['prix_null'][0];
-            }
-            else if( data.errors !== ""){
-              error = data.errors;
-            }
-            //error = data.errors;
-            this.setState({ error });
-          }
-          this.setState({ isLoading: false });
+            this.setState({ isLoading: false });
         }
       )
     }
 
     render() {
-        const { marques, modelesMarque, error, isLoading, success } = this.state;
+        const { marques, modelesMarque, error, isLoading, success, couleurs } = this.state;
         return (
             <div className="row">
                 <div className="col-md-2"></div>
@@ -255,9 +276,15 @@ class CreateAutomobile extends Component {
                                             <div className="col-md-8 pr-1">
                                                 <div className="form-group">
                                                     <label>Couleur</label>
-                                                    <select onChange={this.onHandleChange} value={this.state.couleur} name="couleur" className="form-control" >
+                                                    <select
+                                                        name="couleur" value={this.state.couleur}
+                                                        onChange={this.onHandleChange} className="form-control">
                                                         <option value="">Veuillez sélectionner une couleur</option>
-                                                        <option value="bleu">Bleu</option>
+                                                        {
+                                                            couleurs.map((couleur, i) =>
+                                                                <option key={i} value={couleur.couleur_id}> { couleur.nom }</option>
+                                                            )
+                                                        }
                                                     </select>
                                                 </div>
                                             </div>
@@ -268,9 +295,6 @@ class CreateAutomobile extends Component {
                                             <div className="col-md-8 pr-1">
                                                 <div className="form-group">
                                                     <label>Annee de sortie</label>
-
-                                                    {/* <YearPicker onChange={this.onHandleChange} className="form-control" name="sortie" value={this.state.sortie}  />
- */}
                                                     <input onChange={this.onHandleChange} type="text" className="form-control yearpicker" name="sortie" value={this.state.sortie} />
                                                  </div>
                                             </div>
@@ -306,7 +330,10 @@ class CreateAutomobile extends Component {
                                             <div className="col-md-8 pr-1">
                                                 <div className="form-group">
                                                     <label>Photo</label>
-                                                    <input onChange={this.onHandleChange} type="file" className="form-control-file" name="photo" aria-describedby="fileHelpId" />
+                                                    <input
+                                                        onChange={this.onHandleChange} type="file"
+                                                        className="form-control-file" name="photo"
+                                                        aria-describedby="fileHelpId" />
 
                                                 </div>
                                             </div>

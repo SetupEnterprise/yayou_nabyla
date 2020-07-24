@@ -20,6 +20,7 @@ class CreateAutomobilesTable extends Migration
             $table->date('date_vente')->nullable();
             $table->integer('prix');
             $table->boolean('priorite');
+            $table->string('image_auto');
             $table->timestamps();
         });
     }

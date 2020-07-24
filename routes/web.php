@@ -36,6 +36,8 @@ Route::get('/getMarques', 'AutomobileController@getMarques')->middleware(Connect
 
 Route::get('/getModelesMarque/{id}', 'AutomobileController@getModelesMarque')->middleware(ConnectionSession::class);
 
+Route::get('/getCouleurs', 'AutomobileController@getCouleurs')->middleware(ConnectionSession::class);
+
 Route::resource('marque', 'MarqueController')->middleware(ConnectionSession::class);
 
 Route::resource('modele', 'ModeleController')->middleware(ConnectionSession::class);

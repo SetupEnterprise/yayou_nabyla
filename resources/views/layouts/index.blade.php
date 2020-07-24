@@ -44,7 +44,7 @@
                                     <th scope="row">
                                         <div class="media align-items-center">
                                         <a href="#" class="avatar rounded-circle mr-3">
-                                            <img alt="Image placeholder" src="image_auto/{{ $auto->photo_profil }}">
+                                            <img alt="Image placeholder" src="image_auto/{{ $auto->image_auto }}">
                                         </a>
                                         <div class="media-body">
                                             <span class="mb-0 text-sm">{{$auto->nom_marque}} {{$auto->version}}</span>
@@ -118,7 +118,7 @@
                                                     <form method="POST" action="{{ route('images') }}" enctype="multipart/form-data">
                                                         {{ csrf_field() }}
                                                         <div class="form-group">
-                                                          <input type="hidden" class="form-control" name="automobile_id" value="{{ $auto->automobile_id }}">
+                                                          <input type="hidden" class="form-control" name="automobile_id" value="{{ $auto->id }}">
                                                         </div>
                                                         <div class="form-group">
                                                             <i class="fas fa-images"></i>

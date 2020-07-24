@@ -79859,6 +79859,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
     _this.state = {
       marques: [],
       modelesMarque: [],
+      couleurs: [],
       nom_marque: '',
       modele: '',
       couleur: '',
@@ -79874,6 +79875,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
     _this.onHandleChange = _this.onHandleChange.bind(_assertThisInitialized(_this));
     _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
     _this.sendData = _this.sendData.bind(_assertThisInitialized(_this));
+    _this.getCouleurs = _this.getCouleurs.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -79894,11 +79896,31 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
           });
         }
       });
+      this.getCouleurs();
+    }
+  }, {
+    key: "getCouleurs",
+    value: function getCouleurs() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/getCouleurs").then(function (response) {
+        var data = response.data;
+
+        if (data.status === 'success') {
+          var couleurs = data.couleurs;
+
+          _this3.setState({
+            couleurs: couleurs
+          });
+
+          console.log('couleurs', couleurs);
+        }
+      });
     }
   }, {
     key: "getModelesMarque",
     value: function getModelesMarque(marque_id) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/getModelesMarque/".concat(marque_id)).then(function (response) {
         var data = response.data;
@@ -79906,7 +79928,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         if (data.status === 'success') {
           var modelesMarque = data.modelesMarque;
 
-          _this3.setState({
+          _this4.setState({
             modelesMarque: modelesMarque
           });
 
@@ -79966,7 +79988,6 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
           this.setState({
             photo: e.target.files[0]
           });
-          console.log('photo', photo);
           break;
 
         default:
@@ -80002,7 +80023,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
         error = "Veuillez sélectionner la priorité de la voiture";
       } else if (prix === "" || prix <= 0) {
         error = "Veuillez saisir le montant";
-      } else if (photo === "") {
+      } else if (photo === null) {
         error = "Veuillez choisir une image";
       }
 
@@ -80018,7 +80039,7 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
   }, {
     key: "sendData",
     value: function sendData() {
-      var _this4 = this;
+      var _this5 = this;
 
       var formData = new FormData();
       formData.append('nom_marque', this.state.nom_marque);
@@ -80030,27 +80051,25 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       formData.append('photo', this.state.photo);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/automobile/store", formData).then(function (response) {
         var data = response.data;
-        var _this4$state = _this4.state,
-            success = _this4$state.success,
-            error = _this4$state.error;
+        var success = _this5.state.success;
 
         if (data.status === 'success') {
           success = data.message;
 
-          _this4.setState({
+          _this5.setState({
             success: success
           });
 
-          var _this4$state2 = _this4.state,
-              nom_marque = _this4$state2.nom_marque,
-              modele = _this4$state2.modele,
-              couleur = _this4$state2.couleur,
-              sortie = _this4$state2.sortie,
-              priorite = _this4$state2.priorite,
-              prix = _this4$state2.prix,
-              _photo = _this4$state2.photo;
+          var _this5$state = _this5.state,
+              nom_marque = _this5$state.nom_marque,
+              modele = _this5$state.modele,
+              couleur = _this5$state.couleur,
+              sortie = _this5$state.sortie,
+              priorite = _this5$state.priorite,
+              prix = _this5$state.prix,
+              photo = _this5$state.photo;
 
-          _this4.setState({
+          _this5.setState({
             nom_marque: '',
             modele: '',
             couleur: '',
@@ -80061,42 +80080,47 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
           });
 
           setTimeout(function () {
-            _this4.setState({
+            _this5.setState({
               success: ''
             });
           }, 3000);
         } else {
-          console.log('errors', data.errors);
+          var error = _this5.state.error;
 
-          if (data.errors['nom_marque'] !== undefined) {
+          if (data.errors['nom_marque'] !== "") {
             error = data.errors['nom_marque'][0];
-          } else if (data.errors['modele'] !== undefined) {
+          } else if (data.errors['modele'] !== "") {
             error = data.errors['modele'][0];
-          } else if (data.errors['couleur'] !== undefined) {
+          } else if (data.errors['couleur'] !== "") {
             error = data.errors['couleur'][0];
-          } else if (data.errors['sortie'] !== undefined) {
+          } else if (data.errors['sortie'] !== "") {
             error = data.errors['sortie'][0];
-          } else if (data.errors['priorite'] !== undefined) {
+          } else if (data.errors['priorite'] !== "") {
             error = data.errors['priorite'][0];
-          } else if (data.errors['prix'] !== undefined) {
+          } else if (data.errors['prix'] !== "") {
             error = data.errors['prix'][0];
-          } else if (data.errors['photo'] !== undefined) {
+          } else if (data.errors['photo'] !== "") {
             error = data.errors['photo'][0];
-          } else if (data.errors['date_sortie' !== undefined]) {
+          } else if (data.errors['date_sortie' !== ""]) {
             error = data.errors['date_sortie'][0];
-          } else if (data.errors['prix_null' !== undefined]) {
+          } else if (data.errors['prix_null' !== ""]) {
             error = data.errors['prix_null'][0];
-          } else if (data.errors !== "") {
-            error = data.errors;
-          } //error = data.errors;
+          } else if (data.errors['format_img' !== ""]) {
+            error = data.errors['format_img'][0];
+          }
+          /* else if( data.errors !== ""){
+              error = data.errors;
+          } */
 
 
-          _this4.setState({
+          console.log('errrr', error);
+
+          _this5.setState({
             error: error
           });
         }
 
-        _this4.setState({
+        _this5.setState({
           isLoading: false
         });
       });
@@ -80109,7 +80133,8 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
           modelesMarque = _this$state2.modelesMarque,
           error = _this$state2.error,
           isLoading = _this$state2.isLoading,
-          success = _this$state2.success;
+          success = _this$state2.success,
+          couleurs = _this$state2.couleurs;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -80182,15 +80207,18 @@ var CreateAutomobile = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Couleur"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        onChange: this.onHandleChange,
-        value: this.state.couleur,
         name: "couleur",
+        value: this.state.couleur,
+        onChange: this.onHandleChange,
         className: "form-control"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: ""
-      }, "Veuillez s\xE9lectionner une couleur"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "bleu"
-      }, "Bleu"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Veuillez s\xE9lectionner une couleur"), couleurs.map(function (couleur, i) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: i,
+          value: couleur.couleur_id
+        }, " ", couleur.nom);
+      }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-2"

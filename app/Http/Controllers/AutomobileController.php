@@ -26,8 +26,7 @@ class AutomobileController extends Controller
                         ->join('marques','automobiles.marque_id','=','marques.id')
                         ->join('modeles','automobiles.modele_id','=','modeles.modele_id')
                         ->join('couleurs', 'couleurs.couleur_id', '=', 'automobiles.couleur_id')
-                        ->join('photos', 'photos.automobile_id', '=', 'automobiles.id')
-                        ->where('photos.photo_profil','!=', '')
+                        ->select('automobiles.*', 'marques.*','modeles.*', 'couleurs.*')
                         ->get();
         $taille = count($automobiles);
         //dd($automobiles);
@@ -46,10 +45,8 @@ class AutomobileController extends Controller
         {
             $allowedfileExtension=['jpeg','jpg','png','svg', 'gif', 'webp', 'bmp'];
             $files = $request->file('images');
-            $tableau_img = array();
             foreach($files as $file){
                 //$filename = $file->getClientOriginalName();
-                $destinationPath = public_path('image_auto/'); // upload path
                 $extension = Str::lower($file->getClientOriginalExtension());
                 $check = in_array($extension,$allowedfileExtension);
                 //dd($check);
@@ -71,8 +68,7 @@ class AutomobileController extends Controller
                     $filename = $photo->store('image_auto');
                     Photo::create([
                         'automobile_id' => $request->automobile_id,
-                        'nom_photo' => $filename,
-                        'photo_profil' => ''
+                        'nom_photo' => $filename
                     ]);
                 }
                 session()->flash('message', "Les images ont été ajouté avec succès");
@@ -90,6 +86,15 @@ class AutomobileController extends Controller
     public function create()
     {
         return view('layouts.add');
+    }
+
+    public function getCouleurs()
+    {
+        $couleurs = Couleur::get();
+        return response()->json([
+            'status' => 'success',
+            'couleurs' => $couleurs,
+        ], 200);
     }
 
     public function getMarques()
@@ -127,8 +132,7 @@ class AutomobileController extends Controller
             'sortie' => 'required',
             'priorite' => 'required',
             'prix' => 'required|integer',
-            /* 'photo' => 'required|mimes:jpg,jpeg,png,bmp,gif,svg,webp'
-            'photo' => 'required|mimes:jpg|image', */
+            'photo' => 'required',
         ]);
 
         if($validator->fails()) {
@@ -152,41 +156,49 @@ class AutomobileController extends Controller
             ], 200);
         }
 
-
-        if ($files = $request->file('photo'))
+        if ($request->hasFile('photo'))
         {
-            // Definir le chemin du fichier
-            $destinationPath = public_path('image_auto/'); // upload path
-            $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
-
-
-            //Insertion dans la base
-            //Add table automobiles
-            $automobile = Automobile::create([
-                'annee_sortie' => $request->sortie,
-                'estVendu' => false,
-                'date_vente' => null,
-                'prix' => $request->prix,
-                'priorite' => $request->priorite,
-                'couleur_id' => 1,
-                'marque_id' => $request->nom_marque,
-                'modele_id' => $request->modele
-            ]);
-
-            if($automobile){
-                $photo = Photo::create([
-                    'photo_profil' => $image_auto,
-                    'automobile_id' => $automobile->id
+            $files = $request->file('photo');
+            $allowedfileExtension=['jpeg','jpg','png','svg', 'gif', 'webp', 'bmp'];
+            $extension = Str::lower($files->getClientOriginalExtension());
+            $check = in_array($extension,$allowedfileExtension);
+            if($check)
+            {
+                 // Definir le chemin du fichier
+                $destinationPath = public_path('image_auto/'); // upload path
+                $image_auto = date('dmYHis') . "." . $files->getClientOriginalExtension();
+                //Insertion dans la base
+                //Add table automobiles
+                $automobile = Automobile::create([
+                    'annee_sortie' => $request->sortie,
+                    'estVendu' => false,
+                    'date_vente' => null,
+                    'prix' => $request->prix,
+                    'priorite' => $request->priorite,
+                    'couleur_id' => $request->couleur,
+                    'marque_id' => $request->nom_marque,
+                    'modele_id' => $request->modele,
+                    'image_auto' => $image_auto
                 ]);
 
-            //Ecriture du fichier sur disque
-            $files->move($destinationPath, $image_auto);
-            $insert['image'] = "$image_auto";
+                if($automobile){;
+                    //Ecriture du fichier sur disque
+                    $files->move($destinationPath, $image_auto);
+                    $insert['image'] = "$image_auto";
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Automobile ajouté avec succès'
-            ], 200);
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Automobile ajouté avec succès'
+                    ], 200);
+                }
+            }else
+            {
+                return response()->json(
+                    [
+                        'status' => 'error',
+                        'errors' => ['format_img' => [
+                            'Veuillez vérifier l\'image. Seul ces formats d\'images sont pris en chage png, jpg, jpeg, svg, gif, webp, bmp']]
+                    ], 200);
             }
         }
     }
